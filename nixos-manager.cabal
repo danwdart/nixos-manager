@@ -1,8 +1,8 @@
 name:                nixos-manager
-homepage:            https://github.com/pmiddend/nixos-manager
+homepage:            https://github.com/danwdart/nixos-manager
 author:              Philipp Middendorf <pmidden@mailbox.org>
-maintainer:          Philipp Middendorf <pmidden@mailbox.org>
-copyright:           Philipp Middendorf <pmidden@mailbox.org>
+maintainer:          Dan Dart <nix@dandart.co.uk>
+copyright:           Philipp Middendorf <pmidden@mailbox.org>, Dan Dart <nix@dandart.co.uk>
 category:            GUI
 cabal-version:       >=1.10
 version:             1.0
