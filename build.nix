@@ -1,5 +1,6 @@
-{ pkgs, compiler ? "ghc901" }:
-
+{ pkgs ? import <nixpkgs> {},
+  compiler ? "ghc901"
+}:
 let
   gitignore = pkgs.nix-gitignore.gitignoreSourcePure [ ./.gitignore ];
 
