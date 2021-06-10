@@ -2,7 +2,7 @@ nixos-manager --- manage your NixOS graphically
 ===============================================
 
 [![](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
-[<https://travis-ci.com/pmiddend/nixos-manager.svg?branch=master>](https://travis-ci.com/pmiddend/nixos-manager.svg?branch=master)
+[<https://travis-ci.com/danwdart/nixos-manager.svg?branch=master>](https://travis-ci.com/danwdart/nixos-manager.svg?branch=master)
 
 Rationale
 ---------
