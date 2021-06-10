@@ -13,6 +13,8 @@ import           Text.Megaparsec                ( errorBundlePretty
                                                 , Parsec
                                                 , Stream
                                                 , ShowErrorComponent
+                                                , TraversableStream
+                                                , VisualStream
                                                 )
 import           Data.Char                      ( isUpper
                                                 , toLower
@@ -84,7 +86,7 @@ ifSuccessIO
 ifSuccessIO v f = v >>= validation (pure . Failure) f
 
 parseSafe
-  :: (Stream s, ShowErrorComponent e)
+  :: (Stream s, ShowErrorComponent e, TraversableStream s, VisualStream s)
   => Parsec e s a
   -> String
   -> s
