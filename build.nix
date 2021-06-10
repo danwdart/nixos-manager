@@ -8,13 +8,6 @@ let
 
   myHaskellPackages = pkgs.haskell.packages.${compiler}.override {
     overrides = se: su: {
-
-      gi-gtk-declarative = haskellLib.markUnbroken (su.gi-gtk-declarative.overrideAttrs (oldAttrs: {
-        doCheck = false;
-      }));
-
-      gi-gtk-declarative-app-simple = haskellLib.markUnbroken su.gi-gtk-declarative-app-simple;
-
       "nixos-manager" = haskellLib.overrideCabal
         (se.callCabal2nix "nixos-manager" (gitignore ./.) {})
         (drv: {
@@ -38,7 +31,6 @@ rec
     buildInputs = with pkgs.haskellPackages; [
       cabal-install
       hlint
-      pkgs.niv
       pkgs.nixpkgs-fmt
     ];
     withHoogle = true;
