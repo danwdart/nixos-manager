@@ -3,7 +3,6 @@
 
 Provides a thin layer above "System.Process" - there’s probably something nice out that that can be used instead.
   -}
-{-# LANGUAGE DeriveAnyClass #-}
 {-# LANGUAGE OverloadedLabels #-}
 {-# LANGUAGE DeriveGeneric #-}
 {-# LANGUAGE OverloadedStrings #-}

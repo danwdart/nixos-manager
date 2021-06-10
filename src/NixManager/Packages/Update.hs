@@ -4,7 +4,6 @@ Contains the update logic for the Packages tab
   -}
 {-# LANGUAGE OverloadedLabels #-}
 {-# LANGUAGE FlexibleContexts #-}
-{-# LANGUAGE OverloadedLists #-}
 {-# LANGUAGE OverloadedStrings #-}
 module NixManager.Packages.Update
   ( updateEvent

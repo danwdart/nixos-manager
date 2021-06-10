@@ -1,6 +1,5 @@
 {-# LANGUAGE OverloadedLabels #-}
 {-# LANGUAGE FlexibleContexts #-}
-{-# LANGUAGE OverloadedLists #-}
 {-|
   Description: Trampoline module for all the update functions (for the separate tabs)
   -}

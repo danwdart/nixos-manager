@@ -5,9 +5,7 @@ An icon widget
   -}
 {-# LANGUAGE NamedFieldPuns #-}
 {-# LANGUAGE TypeFamilies #-}
-{-# LANGUAGE OverloadedLabels #-}
 {-# LANGUAGE FlexibleContexts #-}
-{-# LANGUAGE OverloadedLists #-}
 {-# LANGUAGE OverloadedStrings #-}
 module NixManager.View.Icon
   ( icon

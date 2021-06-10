@@ -4,7 +4,6 @@ Contains the update logic for the home-manager Administration tab
   -}
 {-# LANGUAGE OverloadedLabels #-}
 {-# LANGUAGE FlexibleContexts #-}
-{-# LANGUAGE OverloadedLists #-}
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE BlockArguments #-}
 
@@ -117,9 +116,7 @@ updateEvent ms EventRebuild = Transition
     pure (hmAdminEvent (EventRebuildStarted processData))
 updateEvent ms EventGarbage = Transition
   ms
-  do
-    processData <- collectGarbage
-    pure (hmAdminEvent (EventGarbageStarted processData))
+  do hmAdminEvent . EventGarbageStarted <$> collectGarbage
 updateEvent ms EventRebuildCancel = Transition
   (ms & #hmAdminState . #rebuildData . #buildState .~ Nothing)
   do

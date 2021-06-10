@@ -3,9 +3,7 @@
 Contains the update logic for the Packages tab
   -}
 {-# LANGUAGE OverloadedLabels #-}
-{-# LANGUAGE LambdaCase #-}
 {-# LANGUAGE FlexibleContexts #-}
-{-# LANGUAGE OverloadedLists #-}
 {-# LANGUAGE BlockArguments #-}
 {-# LANGUAGE OverloadedStrings #-}
 module NixManager.HMPackages.Update

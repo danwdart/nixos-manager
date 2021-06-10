@@ -4,7 +4,6 @@ Contains the update logic for the Administration tab
   -}
 {-# LANGUAGE OverloadedLabels #-}
 {-# LANGUAGE FlexibleContexts #-}
-{-# LANGUAGE OverloadedLists #-}
 {-# LANGUAGE OverloadedStrings #-}
 
 module NixManager.Admin.Update

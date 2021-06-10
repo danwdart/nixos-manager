@@ -25,7 +25,6 @@ module NixManager.View.PackageEditView
 where
 
 import           GHC.Generics                   ( Generic )
-import           NixManager.Process             ( updateProcess )
 import           Data.Monoid                    ( getFirst )
 import           NixManager.Message             ( errorMessage
                                                 , infoMessage
@@ -42,7 +41,8 @@ import           NixManager.NixPackagesUtil     ( dryInstall
                                                 , startProgram
                                                 )
 import           GI.Gtk.Declarative.App.Simple  ( Transition(Transition) )
-import           NixManager.Process             ( ProcessData
+import           NixManager.Process             ( updateProcess
+                                                , ProcessData
                                                 , ProcessOutput
                                                 )
 import           NixManager.NixLocation         ( flattenedTail )
@@ -297,7 +297,7 @@ buildResultRow
   :: FromWidget (Bin Gtk.ListBoxRow) target => Int -> NixPackage -> target event
 buildResultRow i pkg = bin
   Gtk.ListBoxRow
-  [classes [if i `mod` 2 == 0 then "package-row-even" else "package-row-odd"]]
+  [classes [if even i then "package-row-even" else "package-row-odd"]]
   (widget
     Gtk.Label
     [ #useMarkup := True

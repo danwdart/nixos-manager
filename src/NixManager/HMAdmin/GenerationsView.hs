@@ -81,9 +81,9 @@ data Event = EventActivate -- ^ Is emitted when the user clicks on the activate 
 buildRow :: GenerationLine -> Bin Gtk.ListBoxRow Event
 buildRow gl =
   let labelText =
-          (  (surroundSimple "b" $ "Generation " <> (gl ^. #genId . decodeUtf8))
-          <> "\n"
-          <> (surroundSimple "i" $ (gl ^. #datePretty))
+          ( surroundSimple "b" ("Generation " <> (gl ^. #genId . decodeUtf8))
+            <> "\n"
+            <> surroundSimple "i" (gl ^. #datePretty)
           )
       label        = widget Gtk.Label [#label := labelText, #useMarkup := True]
       rowContainer = container Gtk.Box

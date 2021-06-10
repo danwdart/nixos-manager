@@ -2,7 +2,7 @@
 {-# LANGUAGE RankNTypes #-}
 {-|
   Description: The "root" event type, to be used with the gi-gtk-declarative-app-simple model. The different tabs (notebook pages) use their own events, which are also manager events.
-  #-}
+  -}
 module NixManager.ManagerEvent
   ( ManagerEvent(..)
   , adminEvent
