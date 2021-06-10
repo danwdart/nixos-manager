@@ -259,8 +259,3 @@ Alternatives
 -   [nix42b](https://gitlab.com/juliendehos/nix42b) --- is another
     user-friendly Nix package manager, also written in Haskell. It
     doesn't seem to be actively maintained anymore.
-
-Donations
----------
-
-[PayPal.Me](https://paypal.me/PhilippMiddendorf)
