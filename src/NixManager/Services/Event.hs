@@ -7,10 +7,9 @@ module NixManager.Services.Event
   )
 where
 
-import           NixManager.Services.Download   ( DownloadState )
-import           NixManager.Services.State      ( State )
-import           NixManager.View.ServiceEditView
-                                                ( EditViewEvent )
+import           NixManager.Services.Download    (DownloadState)
+import           NixManager.Services.State       (State)
+import           NixManager.View.ServiceEditView (EditViewEvent)
 
 data Event = EventDownloadStart -- ^ Triggered when the user presses the “Start download” button. The next event will be the 'EventDownloadStarted' event.
            | EventEditView EditViewEvent -- ^ Sub-event triggered by the "NixManager.Services.EditView"

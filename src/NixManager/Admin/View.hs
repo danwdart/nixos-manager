@@ -1,10 +1,10 @@
-{-# LANGUAGE OverloadedLabels #-}
 {-# LANGUAGE DuplicateRecordFields #-}
-{-# LANGUAGE TypeFamilies #-}
-{-# LANGUAGE RankNTypes #-}
-{-# LANGUAGE FlexibleContexts #-}
-{-# LANGUAGE OverloadedLists #-}
-{-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE FlexibleContexts      #-}
+{-# LANGUAGE OverloadedLabels      #-}
+{-# LANGUAGE OverloadedLists       #-}
+{-# LANGUAGE OverloadedStrings     #-}
+{-# LANGUAGE RankNTypes            #-}
+{-# LANGUAGE TypeFamilies          #-}
 {-|
   Description: Contains the actual GUI (widgets) for the Administation tab
 Contains the actual GUI (widgets) for the Administation tab
@@ -14,86 +14,42 @@ module NixManager.Admin.View
   )
 where
 
-import           Data.Vector                    ( Vector )
-import           NixManager.View.InformationBox ( informationBox )
-import           NixManager.NixRebuildMode      ( rebuildModeToText )
-import           System.Exit                    ( ExitCode(ExitSuccess) )
-import qualified NixManager.View.IconName      as IconName
-import           NixManager.View.GtkUtil        ( expandAndFill
-                                                , fillNoExpand
-                                                , paddedAround
-                                                )
-import           NixManager.View.ImageButton    ( imageButton )
-import           NixManager.View.ProgressBar    ( progressBar )
-import           NixManager.View.ComboBox       ( comboBox
-                                                , ComboBoxProperties
-                                                  ( ComboBoxProperties
-                                                  )
-                                                , ComboBoxChangeEvent
-                                                  ( ComboBoxChangeEvent
-                                                  )
-                                                )
-import           Data.Text.Encoding             ( decodeUtf8 )
-import           GI.Gtk.Declarative             ( bin
-                                                , on
-                                                , classes
-                                                , onM
-                                                , BoxChild(BoxChild)
-                                                , widget
-                                                , Attribute((:=))
-                                                , container
-                                                )
-import           GI.Gtk.Declarative.Container.Grid
-                                                ( GridChild(GridChild)
-                                                , GridChildProperties
-                                                  ( width
-                                                  , leftAttach
-                                                  , topAttach
-                                                  )
-                                                )
-import qualified GI.Gtk                        as Gtk
-import           NixManager.ManagerEvent        ( ManagerEvent
-                                                  ( ManagerEventAdmin
-                                                  )
-                                                )
-import           NixManager.ChangeType          ( ChangeType(Changes) )
-import           NixManager.Admin.Event         ( Event
-                                                  ( EventRebuild
-                                                  , EventGarbage
-                                                  , EventGarbageCancel
-                                                  , EventRebuildDoUpdateChanged
-                                                  , EventGarbageChangeDetails
-                                                  , EventGarbageOlderGenerationsChanged
-                                                  , EventRebuildDoRollbackChanged
-                                                  , EventRebuildCancel
-                                                  , EventRebuildModeIdxChanged
-                                                  , EventRebuildChangeDetails
-                                                  )
-                                                )
-import           NixManager.ManagerState        ( ManagerState )
-import           GI.Gtk.Declarative.Widget      ( Widget )
-import           NixManager.Admin.BuildState    ( BuildState )
-import           Control.Lens                   ( (^.)
-                                                , has
-                                                , _Nothing
-                                                , view
-                                                , from
-                                                , folded
-                                                , to
-                                                , (^?!)
-                                                )
-import           Data.Monoid                    ( getFirst )
-import           NixManager.Admin.ValidRebuildModes
-                                                ( validRebuildModes
-                                                , descriptionForValidRebuildMode
-                                                , validRebuildModeIdx
-                                                )
-import           Data.Default                   ( def )
-import           NixManager.View.DetailsState   ( detailsBool
-                                                , DetailsState
-                                                )
-import           NixManager.Admin.State         ( State )
-import           NixManager.Process             ( ProcessOutput )
+import           Control.Lens                       (_Nothing, folded, from,
+                                                     has, to, view, (^.), (^?!))
+import           Data.Default                       (def)
+import           Data.Monoid                        (getFirst)
+import           Data.Text.Encoding                 (decodeUtf8)
+import           Data.Vector                        (Vector)
+import qualified GI.Gtk                             as Gtk
+import           GI.Gtk.Declarative                 (Attribute ((:=)),
+                                                     BoxChild (BoxChild), bin,
+                                                     classes, container, on,
+                                                     onM, widget)
+import           GI.Gtk.Declarative.Container.Grid  (GridChild (GridChild),
+                                                     GridChildProperties (leftAttach, topAttach, width))
+import           GI.Gtk.Declarative.Widget          (Widget)
+import           NixManager.Admin.BuildState        (BuildState)
+import           NixManager.Admin.Event             (Event (EventGarbage, EventGarbageCancel, EventGarbageChangeDetails, EventGarbageOlderGenerationsChanged, EventRebuild, EventRebuildCancel, EventRebuildChangeDetails, EventRebuildDoRollbackChanged, EventRebuildDoUpdateChanged, EventRebuildModeIdxChanged))
+import           NixManager.Admin.State             (State)
+import           NixManager.Admin.ValidRebuildModes (descriptionForValidRebuildMode,
+                                                     validRebuildModeIdx,
+                                                     validRebuildModes)
+import           NixManager.ChangeType              (ChangeType (Changes))
+import           NixManager.ManagerEvent            (ManagerEvent (ManagerEventAdmin))
+import           NixManager.ManagerState            (ManagerState)
+import           NixManager.NixRebuildMode          (rebuildModeToText)
+import           NixManager.Process                 (ProcessOutput)
+import           NixManager.View.ComboBox           (ComboBoxChangeEvent (ComboBoxChangeEvent),
+                                                     ComboBoxProperties (ComboBoxProperties),
+                                                     comboBox)
+import           NixManager.View.DetailsState       (DetailsState, detailsBool)
+import           NixManager.View.GtkUtil            (expandAndFill,
+                                                     fillNoExpand, paddedAround)
+import qualified NixManager.View.IconName           as IconName
+import           NixManager.View.ImageButton        (imageButton)
+import           NixManager.View.InformationBox     (informationBox)
+import           NixManager.View.ProgressBar        (progressBar)
+import           System.Exit                        (ExitCode (ExitSuccess))
 
 -- | The “root” GUI function
 adminBox :: ManagerState -> Widget ManagerEvent

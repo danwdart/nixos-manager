@@ -1,5 +1,5 @@
-{-# LANGUAGE DeriveGeneric #-}
-{-# LANGUAGE LambdaCase #-}
+{-# LANGUAGE DeriveGeneric     #-}
+{-# LANGUAGE LambdaCase        #-}
 {-# LANGUAGE OverloadedStrings #-}
 {-|
   Description: Contains all state data for the home-manager generations view
@@ -11,15 +11,11 @@ module NixManager.HMAdmin.GenerationsState
   )
 where
 
-import           NixManager.HMGenerations       ( readGenerations )
-import           NixManager.HMAdmin.GenerationsData
-                                                ( GenerationsData
-                                                  ( GenerationsData
-                                                  )
-                                                )
-import           Data.Text                      ( Text )
-import           Data.Validation                ( Validation(Failure, Success) )
-import           GHC.Generics                   ( Generic )
+import           Data.Text                          (Text)
+import           Data.Validation                    (Validation (Failure, Success))
+import           GHC.Generics                       (Generic)
+import           NixManager.HMAdmin.GenerationsData (GenerationsData (GenerationsData))
+import           NixManager.HMGenerations           (readGenerations)
 
 -- | Current state of the generations view (depends on the success of the @home-manager generations@ call)
 data GenerationsState = ValidGenerationsState GenerationsData

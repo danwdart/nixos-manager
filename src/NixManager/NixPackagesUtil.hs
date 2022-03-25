@@ -2,9 +2,9 @@
   Description: Functions to process (install/uninstall, ...) Nix packages
 Functions to process (install/uninstall, ...) Nix packages
   -}
-{-# LANGUAGE OverloadedStrings #-}
-{-# LANGUAGE OverloadedLabels #-}
-{-# LANGUAGE OverloadedLists #-}
+{-# LANGUAGE OverloadedLabels    #-}
+{-# LANGUAGE OverloadedLists     #-}
+{-# LANGUAGE OverloadedStrings   #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 module NixManager.NixPackagesUtil
   ( searchPackages
@@ -23,87 +23,37 @@ module NixManager.NixPackagesUtil
   )
 where
 
-import           Data.Validation                ( Validation(Success, Failure) )
-import           Data.Text                      ( strip
-                                                , toLower
-                                                , pack
-                                                )
-import           NixManager.Constants           ( appName
-                                                , rootManagerPath
-                                                )
-import           Data.ByteString                ( ByteString )
-import           NixManager.Bash                ( Expr(Command)
-                                                , Arg(LiteralArg)
-                                                )
-import           NixManager.NixLocation         ( flattenedTail
-                                                , flattened
-                                                , NixLocation
-                                                , locationFromText
-                                                )
-import           Data.Map.Strict                ( singleton )
-import           Control.Monad                  ( void
-                                                , unless
-                                                )
-import           System.Directory               ( listDirectory
-                                                , getXdgDirectory
-                                                , doesFileExist
-                                                , XdgDirectory(XdgConfig)
-                                                )
-import           System.FilePath                ( (</>)
-                                                , takeFileName
-                                                )
-import           Data.List                      ( intercalate
-                                                , (\\)
-                                                , find
-                                                , inits
-                                                )
-import           NixManager.Util                ( TextualError
-                                                , decodeUtf8
-                                                , splitRepeat
-                                                , addToError
-                                                , ifSuccessIO
-                                                , showText
-                                                )
-import           Data.String                    ( IsString )
-import           NixManager.NixExpr             ( NixExpr
-                                                  ( NixSymbol
-                                                  , NixSet
-                                                  , NixList
-                                                  , NixFunctionDecl
-                                                  )
-                                                , NixFunction(NixFunction)
-                                                , evalSymbols
-                                                , parseNixFile
-                                                , writeNixFile
-                                                )
-import           Control.Exception              ( catch
-                                                , IOException
-                                                )
-import           NixManager.NixPackageStatus    ( NixPackageStatus
-                                                  ( NixPackageNothing
-                                                  , NixPackageInstalled
-                                                  , NixPackagePendingInstall
-                                                  , NixPackagePendingUninstall
-                                                  )
-                                                )
-import           NixManager.NixPackage          ( NixPackage )
-import           Control.Lens                   ( (^.)
-                                                , (.~)
-                                                , (^?)
-                                                , ix
-                                                , Traversal'
-                                                , hasn't
-                                                , only
-                                                , (<>~)
-                                                , (&)
-                                                , to
-                                                , (%~)
-                                                )
-import           Data.Text.Lens                 ( unpacked )
-import           NixManager.Process             ( runProcess
-                                                , ProcessData
-                                                )
-import           NixManager.NixPackageSearch    ( searchPackages )
+import           Control.Exception           (IOException, catch)
+import           Control.Lens                (Traversal', hasn't, ix, only, to,
+                                              (%~), (&), (.~), (<>~), (^.),
+                                              (^?))
+import           Control.Monad               (unless, void)
+import           Data.ByteString             (ByteString)
+import           Data.List                   (find, inits, intercalate, (\\))
+import           Data.Map.Strict             (singleton)
+import           Data.String                 (IsString)
+import           Data.Text                   (pack, strip, toLower)
+import           Data.Text.Lens              (unpacked)
+import           Data.Validation             (Validation (Failure, Success))
+import           NixManager.Bash             (Arg (LiteralArg), Expr (Command))
+import           NixManager.Constants        (appName, rootManagerPath)
+import           NixManager.NixExpr          (NixExpr (NixFunctionDecl, NixList, NixSet, NixSymbol),
+                                              NixFunction (NixFunction),
+                                              evalSymbols, parseNixFile,
+                                              writeNixFile)
+import           NixManager.NixLocation      (NixLocation, flattened,
+                                              flattenedTail, locationFromText)
+import           NixManager.NixPackage       (NixPackage)
+import           NixManager.NixPackageSearch (searchPackages)
+import           NixManager.NixPackageStatus (NixPackageStatus (NixPackageInstalled, NixPackageNothing, NixPackagePendingInstall, NixPackagePendingUninstall))
+import           NixManager.Process          (ProcessData, runProcess)
+import           NixManager.Util             (TextualError, addToError,
+                                              decodeUtf8, ifSuccessIO, showText,
+                                              splitRepeat)
+import           System.Directory            (XdgDirectory (XdgConfig),
+                                              doesFileExist, getXdgDirectory,
+                                              listDirectory)
+import           System.FilePath             (takeFileName, (</>))
 
 -- | Given a package name and a list of binaries in that package, try to identify which binary is likely /the/ binary for the package.
 matchName :: String -> [FilePath] -> Maybe FilePath

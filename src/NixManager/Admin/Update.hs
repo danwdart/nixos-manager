@@ -2,8 +2,8 @@
   Description: Contains the update logic for the Administration tab
 Contains the update logic for the Administration tab
   -}
-{-# LANGUAGE OverloadedLabels #-}
-{-# LANGUAGE FlexibleContexts #-}
+{-# LANGUAGE FlexibleContexts  #-}
+{-# LANGUAGE OverloadedLabels  #-}
 {-# LANGUAGE OverloadedStrings #-}
 
 module NixManager.Admin.Update
@@ -11,102 +11,43 @@ module NixManager.Admin.Update
   )
 where
 
-import           NixManager.PosixTools          ( kill )
-import qualified Data.ByteString.Char8         as BS
-import           NixManager.Password            ( Password
-                                                  ( Password
-                                                  , getPassword
-                                                  )
-                                                )
-import           NixManager.NixGarbage          ( collectGarbage )
-import           NixManager.ManagerEvent        ( adminEvent
-                                                , ManagerEvent
-                                                , pureTransition
-                                                , packagesEvent
-                                                )
-import qualified NixManager.Packages.Event     as PackagesEvent
-import           Data.Text.Encoding             ( decodeUtf8
-                                                , encodeUtf8
-                                                )
-import           System.Exit                    ( ExitCode
-                                                  ( ExitSuccess
-                                                  , ExitFailure
-                                                  )
-                                                )
-import           NixManager.Process             ( updateProcess
-                                                , runProcessToFinish
-                                                , getProcessId
-                                                )
-import           NixManager.Admin.State         ( State
-                                                , changes
-                                                , rebuildData
-                                                , garbageData
-                                                , determineChanges
-                                                )
-import           Data.Monoid                    ( getFirst )
-import           Control.Lens                   ( (^.)
-                                                , from
-                                                , traversed
-                                                , (<>~)
-                                                , (&)
-                                                , (?~)
-                                                , to
-                                                , (.~)
-                                                , (+~)
-                                                )
-import           NixManager.Admin.Event         ( Event
-                                                  ( EventRebuild
-                                                  , EventRebuildStarted
-                                                  , EventReload
-                                                  , EventGarbage
-                                                  , EventGarbageCancel
-                                                  , EventGarbageWatch
-                                                  , EventGarbageFinished
-                                                  , EventReloadFinished
-                                                  , EventRebuildWatch
-                                                  , EventRebuildWithPassword
-                                                  , EventGarbageOlderGenerationsChanged
-                                                  , EventRebuildCancel
-                                                  , EventRebuildChangeDetails
-                                                  , EventGarbageChangeDetails
-                                                  , EventRebuildFinished
-                                                  , EventRebuildDoUpdateChanged
-                                                  , EventGarbageWithPassword
-                                                  , EventGarbageStarted
-                                                  , EventRebuildDoRollbackChanged
-                                                  , EventRebuildModeIdxChanged
-                                                  , EventAskPassWatch
-                                                  )
-                                                )
-import           NixManager.ManagerState        ( ManagerState(..) )
-import           NixManager.Util                ( threadDelayMillis )
-import           NixManager.ChangeType          ( ChangeType(NoChanges) )
-import           NixManager.AskPass             ( askPass
-                                                , sudoExpr
-                                                )
-import           NixManager.NixRebuild          ( rebuild
-                                                , rollbackRebuild
-                                                )
-import           GI.Gtk.Declarative.App.Simple  ( Transition(Transition) )
-import           Prelude                 hiding ( length
-                                                , putStrLn
-                                                )
-import           NixManager.NixRebuildUpdateMode
-                                                ( NixRebuildUpdateMode
-                                                  ( NixRebuildUpdateUpdate
-                                                  , NixRebuildUpdateRollback
-                                                  , NixRebuildUpdateNone
-                                                  )
-                                                )
-import           NixManager.Admin.BuildState    ( BuildState(BuildState) )
-import           NixManager.Admin.ValidRebuildModes
-                                                ( validRebuildModeIdx )
+import           Control.Lens                       (from, to, traversed, (&),
+                                                     (+~), (.~), (<>~), (?~),
+                                                     (^.))
+import qualified Data.ByteString.Char8              as BS
+import           Data.Monoid                        (getFirst)
+import           Data.Text.Encoding                 (decodeUtf8, encodeUtf8)
+import           GI.Gtk.Declarative.App.Simple      (Transition (Transition))
+import           NixManager.Admin.BuildState        (BuildState (BuildState))
+import           NixManager.Admin.Event             (Event (EventAskPassWatch, EventGarbage, EventGarbageCancel, EventGarbageChangeDetails, EventGarbageFinished, EventGarbageOlderGenerationsChanged, EventGarbageStarted, EventGarbageWatch, EventGarbageWithPassword, EventRebuild, EventRebuildCancel, EventRebuildChangeDetails, EventRebuildDoRollbackChanged, EventRebuildDoUpdateChanged, EventRebuildFinished, EventRebuildModeIdxChanged, EventRebuildStarted, EventRebuildWatch, EventRebuildWithPassword, EventReload, EventReloadFinished))
+import           NixManager.Admin.State             (State, changes,
+                                                     determineChanges,
+                                                     garbageData, rebuildData)
+import           NixManager.Admin.ValidRebuildModes (validRebuildModeIdx)
+import           NixManager.AskPass                 (askPass, sudoExpr)
+import           NixManager.ChangeType              (ChangeType (NoChanges))
+import           NixManager.ManagerEvent            (ManagerEvent, adminEvent,
+                                                     packagesEvent,
+                                                     pureTransition)
+import           NixManager.ManagerState            (ManagerState (..))
+import           NixManager.NixGarbage              (collectGarbage)
+import           NixManager.NixRebuild              (rebuild, rollbackRebuild)
+import           NixManager.NixRebuildUpdateMode    (NixRebuildUpdateMode (NixRebuildUpdateNone, NixRebuildUpdateRollback, NixRebuildUpdateUpdate))
+import qualified NixManager.Packages.Event          as PackagesEvent
+import           NixManager.Password                (Password (Password, getPassword))
+import           NixManager.PosixTools              (kill)
+import           NixManager.Process                 (getProcessId,
+                                                     runProcessToFinish,
+                                                     updateProcess)
+import           NixManager.Util                    (threadDelayMillis)
+import           Prelude                            hiding (length, putStrLn)
+import           System.Exit                        (ExitCode (ExitFailure, ExitSuccess))
 
 -- | Given two mutually exclusive "do rollback" and "do update" booleans, calculate the update mode.
 calculateRebuildUpdateMode :: Bool -> Bool -> NixRebuildUpdateMode
-calculateRebuildUpdateMode _update@True _ = NixRebuildUpdateUpdate
+calculateRebuildUpdateMode _update@True _   = NixRebuildUpdateUpdate
 calculateRebuildUpdateMode _ _rollback@True = NixRebuildUpdateRollback
-calculateRebuildUpdateMode _ _ = NixRebuildUpdateNone
+calculateRebuildUpdateMode _ _              = NixRebuildUpdateNone
 
 -- | Format a process exit code somewhat nicer than the default 'Show' instance
 formatExitCode :: ExitCode -> BS.ByteString

@@ -1,8 +1,8 @@
-{-# LANGUAGE OverloadedLists #-}
-{-# LANGUAGE OverloadedLabels #-}
-{-# LANGUAGE BlockArguments #-}
-{-# LANGUAGE FlexibleContexts #-}
-{-# LANGUAGE LambdaCase #-}
+{-# LANGUAGE BlockArguments    #-}
+{-# LANGUAGE FlexibleContexts  #-}
+{-# LANGUAGE LambdaCase        #-}
+{-# LANGUAGE OverloadedLabels  #-}
+{-# LANGUAGE OverloadedLists   #-}
 {-# LANGUAGE OverloadedStrings #-}
 {-|
   Description: Contains the "subwidget" for the home-manager generations view
@@ -15,56 +15,32 @@ module NixManager.HMAdmin.GenerationsView
   )
 where
 
-import           Data.Validation                ( Validation(Failure, Success) )
-import           GI.Gtk.Declarative.App.Simple  ( Transition(Transition) )
-import           Data.Default                   ( def )
-import           Data.Vector.Lens               ( toVectorOf )
-import           GI.Gtk.Declarative             ( bin
-                                                , container
-                                                , onM
-                                                , Attribute((:=))
-                                                , Widget
-                                                , Bin
-                                                , widget
-                                                , BoxChild(BoxChild)
-                                                , on
-                                                )
-import           NixManager.View.GtkUtil        ( expandAndFill )
-import qualified GI.Gtk                        as Gtk
-import           Control.Lens                   ( has
-                                                , (^?)
-                                                , (&)
-                                                , (?~)
-                                                , (.~)
-                                                , (^.)
-                                                , traversed
-                                                , to
-                                                , set
-                                                )
-import           NixManager.Util                ( decodeUtf8
-                                                , surroundSimple
-                                                , TextualError
-                                                )
-import           NixManager.View.ImageButton    ( imageButton )
-import qualified NixManager.View.IconName      as IconName
-import           NixManager.Message             ( infoMessage
-                                                , messageWidget
-                                                , Message
-                                                )
-import           NixManager.HMAdmin.GenerationsData
-                                                ( selectedGeneration )
-import           NixManager.HMAdmin.GenerationsState
-                                                ( GenerationsState
-                                                  ( InvalidGenerationsState
-                                                  , ValidGenerationsState
-                                                  )
-                                                )
-import           NixManager.HMGenerations       ( GenerationLine
-                                                , readGenerations
-                                                , activateGeneration
-                                                , removeGeneration
-                                                )
-import           Data.Text                      ( Text )
+import           Control.Lens                        (has, set, to, traversed,
+                                                      (&), (.~), (?~), (^.),
+                                                      (^?))
+import           Data.Default                        (def)
+import           Data.Text                           (Text)
+import           Data.Validation                     (Validation (Failure, Success))
+import           Data.Vector.Lens                    (toVectorOf)
+import qualified GI.Gtk                              as Gtk
+import           GI.Gtk.Declarative                  (Attribute ((:=)), Bin,
+                                                      BoxChild (BoxChild),
+                                                      Widget, bin, container,
+                                                      on, onM, widget)
+import           GI.Gtk.Declarative.App.Simple       (Transition (Transition))
+import           NixManager.HMAdmin.GenerationsData  (selectedGeneration)
+import           NixManager.HMAdmin.GenerationsState (GenerationsState (InvalidGenerationsState, ValidGenerationsState))
+import           NixManager.HMGenerations            (GenerationLine,
+                                                      activateGeneration,
+                                                      readGenerations,
+                                                      removeGeneration)
+import           NixManager.Message                  (Message, infoMessage,
+                                                      messageWidget)
+import           NixManager.Util                     (TextualError, decodeUtf8,
+                                                      surroundSimple)
+import           NixManager.View.GtkUtil             (expandAndFill)
+import qualified NixManager.View.IconName            as IconName
+import           NixManager.View.ImageButton         (imageButton)
 
 -- | All events that the generations view needs
 data Event = EventActivate -- ^ Is emitted when the user clicks on the activate button
@@ -140,7 +116,7 @@ generationsValidView generationsData =
       <> [BoxChild def listBox]
       )
 
--- | Constructs the generations view, which is possibly in an invalid state 
+-- | Constructs the generations view, which is possibly in an invalid state
 generationsView (InvalidGenerationsState message) =
   widget Gtk.Label [#label := ("Couldn't read generations data: " <> message)]
 generationsView (ValidGenerationsState generationsData) =

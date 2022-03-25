@@ -10,40 +10,16 @@ module NixManager.Docbook
   )
 where
 
-import           Data.Text                      ( Text
-                                                , replace
-                                                )
-import           Text.XML                       ( parseText
-                                                , Element
-                                                , Document
-                                                , Node
-                                                  ( NodeContent
-                                                  , NodeComment
-                                                  , NodeElement
-                                                  , NodeInstruction
-                                                  )
-                                                )
-import           Data.Default                   ( def )
-import           NixManager.Util                ( TextualError
-                                                , Endo
-                                                , surroundSimple
-                                                , fromExceptionEither
-                                                , addToError
-                                                )
-import           Control.Lens                   ( view
-                                                , to
-                                                , (^.)
-                                                , plate
-                                                , folded
-                                                )
-import           Text.XML.Lens                  ( nodes
-                                                , localName
-                                                , root
-                                                , text
-                                                , attr
-                                                , named
-                                                )
-import           Data.Text.Lazy                 ( fromStrict )
+import           Control.Lens    (folded, plate, to, view, (^.))
+import           Data.Default    (def)
+import           Data.Text       (Text, replace)
+import           Data.Text.Lazy  (fromStrict)
+import           NixManager.Util (Endo, TextualError, addToError,
+                                  fromExceptionEither, surroundSimple)
+import           Text.XML        (Document, Element,
+                                  Node (NodeComment, NodeContent, NodeElement, NodeInstruction),
+                                  parseText)
+import           Text.XML.Lens   (attr, localName, named, nodes, root, text)
 
 -- | Parse a docbook string into a valid 'Document' (or return an error)
 parseDocbook :: Text -> TextualError Document

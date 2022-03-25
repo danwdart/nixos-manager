@@ -8,13 +8,11 @@ module NixManager.Admin.Event
   )
 where
 
-import           NixManager.Process             ( ProcessData
-                                                , ProcessOutput
-                                                )
-import           NixManager.View.DetailsState   ( DetailsState )
-import           System.Exit                    ( ExitCode )
-import           NixManager.ChangeType          ( ChangeType )
-import           NixManager.Password            ( Password )
+import           NixManager.ChangeType        (ChangeType)
+import           NixManager.Password          (Password)
+import           NixManager.Process           (ProcessData, ProcessOutput)
+import           NixManager.View.DetailsState (DetailsState)
+import           System.Exit                  (ExitCode)
 
 data Event = EventRebuild -- ^ Triggered by the Rebuild button. Starts the password query.
            | EventRebuildWithPassword Password -- ^ Triggered by the “ask for password” process after it completes. It launches the actual rebuild process.

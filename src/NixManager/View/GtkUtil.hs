@@ -3,22 +3,16 @@
 
 Various GTK-related utilities
   -}
-{-# LANGUAGE OverloadedLabels #-}
 {-# LANGUAGE FlexibleContexts #-}
-{-# LANGUAGE OverloadedLists #-}
+{-# LANGUAGE OverloadedLabels #-}
+{-# LANGUAGE OverloadedLists  #-}
 module NixManager.View.GtkUtil where
 
-import           GI.Gtk.Declarative             ( padding
-                                                , defaultBoxChildProperties
-                                                , expand
-                                                , container
-                                                , fill
-                                                , Attribute((:=))
-                                                , container
-                                                , BoxChild(BoxChild)
-                                                , BoxChildProperties
-                                                )
-import qualified GI.Gtk                        as Gtk
+import qualified GI.Gtk             as Gtk
+import           GI.Gtk.Declarative (Attribute ((:=)), BoxChild (BoxChild),
+                                     BoxChildProperties, container,
+                                     defaultBoxChildProperties, expand, fill,
+                                     padding)
 
 
 -- | Add some padding around a widget

@@ -1,4 +1,4 @@
-{-# LANGUAGE DeriveGeneric #-}
+{-# LANGUAGE DeriveGeneric     #-}
 {-# LANGUAGE OverloadedStrings #-}
 {-|
   Description: Contains all the state for the Administration tab
@@ -11,29 +11,22 @@ module NixManager.Admin.State
   )
 where
 
-import           NixManager.ChangeType          ( ChangeType(Changes, NoChanges)
-                                                )
-import           NixManager.Admin.RebuildData   ( RebuildData
-                                                , initialRebuildData
-                                                )
-import           NixManager.Admin.GarbageData   ( GarbageData
-                                                , initialGarbageData
-                                                )
-import           NixManager.NixServicesUtil     ( locateLocalServicesFile
-                                                , locateRootServicesFile
-                                                )
-import           NixManager.NixPackagesUtil     ( locateLocalPackagesFile
-                                                , locateRootPackagesFile
-                                                )
-import           NixManager.Util                ( determineFilesEqual )
-import           Data.Generics.Labels           ( )
-import           GHC.Generics                   ( Generic )
+import           Data.Generics.Labels         ()
+import           GHC.Generics                 (Generic)
+import           NixManager.Admin.GarbageData (GarbageData, initialGarbageData)
+import           NixManager.Admin.RebuildData (RebuildData, initialRebuildData)
+import           NixManager.ChangeType        (ChangeType (Changes, NoChanges))
+import           NixManager.NixPackagesUtil   (locateLocalPackagesFile,
+                                               locateRootPackagesFile)
+import           NixManager.NixServicesUtil   (locateLocalServicesFile,
+                                               locateRootServicesFile)
+import           NixManager.Util              (determineFilesEqual)
 
 -- | Contains all the state for the administration tab
 data State = State {
     rebuildData :: RebuildData -- ^ The “Rebuild” GUI state
   , garbageData :: GarbageData -- ^ The “Collect garbage” GUI state
-  , changes :: ChangeType -- ^ Information about whether we have unapplied changes
+  , changes     :: ChangeType -- ^ Information about whether we have unapplied changes
   } deriving(Generic)
 
 -- | Determine if there are changes that have to be applied.

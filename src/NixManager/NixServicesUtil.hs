@@ -1,6 +1,6 @@
-{-# LANGUAGE OverloadedStrings #-}
-{-# LANGUAGE OverloadedLabels #-}
-{-# LANGUAGE LambdaCase #-}
+{-# LANGUAGE LambdaCase          #-}
+{-# LANGUAGE OverloadedLabels    #-}
+{-# LANGUAGE OverloadedStrings   #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 {-|
   Description: Provides functions and types regarding “services” (so anything that’s not a package basically)
@@ -18,41 +18,21 @@ module NixManager.NixServicesUtil
   )
 where
 
-import           Data.Validation                ( Validation(Failure) )
-import           Data.Text.Lens                 ( unpacked )
-import           System.Environment             ( getEnv )
-import           Control.Monad                  ( unless )
-import           System.FilePath                ( (</>)
-                                                , takeFileName
-                                                )
-import           NixManager.Constants           ( appName
-                                                , rootManagerPath
-                                                )
-import           Data.String                    ( IsString )
-import           System.Directory               ( getXdgDirectory
-                                                , doesFileExist
-                                                , XdgDirectory(XdgConfig)
-                                                )
-import           Prelude                 hiding ( readFile )
-import           Control.Lens                   ( filteredBy
-                                                , only
-                                                , at
-                                                , folded
-                                                , (^?)
-                                                )
-import           NixManager.NixExpr             ( NixExpr
-                                                  ( NixFunctionDecl
-                                                  , NixSet
-                                                  , NixNull
-                                                  )
-                                                , NixFunction(NixFunction)
-                                                , parseNixFile
-                                                , writeNixFile
-                                                )
-import           NixManager.Util                ( TextualError
-                                                , addToError
-                                                , toMaybe
-                                                )
+import           Control.Lens         (at, filteredBy, folded, only, (^?))
+import           Control.Monad        (unless)
+import           Data.String          (IsString)
+import           Data.Text.Lens       (unpacked)
+import           Data.Validation      (Validation (Failure))
+import           NixManager.Constants (appName, rootManagerPath)
+import           NixManager.NixExpr   (NixExpr (NixFunctionDecl, NixNull, NixSet),
+                                       NixFunction (NixFunction), parseNixFile,
+                                       writeNixFile)
+import           NixManager.Util      (TextualError, addToError, toMaybe)
+import           Prelude              hiding (readFile)
+import           System.Directory     (XdgDirectory (XdgConfig), doesFileExist,
+                                       getXdgDirectory)
+import           System.Environment   (getEnv)
+import           System.FilePath      (takeFileName, (</>))
 
 -- | File name for the services Nix file
 servicesFileName :: IsString s => s

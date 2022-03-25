@@ -3,8 +3,8 @@
 
 Provides a thin layer above "System.Process" - there’s probably something nice out that that can be used instead.
   -}
-{-# LANGUAGE OverloadedLabels #-}
-{-# LANGUAGE DeriveGeneric #-}
+{-# LANGUAGE DeriveGeneric     #-}
+{-# LANGUAGE OverloadedLabels  #-}
 {-# LANGUAGE OverloadedStrings #-}
 module NixManager.Process
   ( ProcessOutput
@@ -19,46 +19,29 @@ module NixManager.Process
   )
 where
 
-import           Data.Foldable                  ( for_ )
-import           Data.Monoid                    ( First(First) )
-import           Data.ByteString                ( ByteString
-                                                , hGetNonBlocking
-                                                , hPutStr
-                                                , hGetContents
-                                                )
-import           Control.Lens                   ( view
-                                                , (^.)
-                                                )
-import           System.Process                 ( ProcessHandle
-                                                , getProcessExitCode
-                                                , createProcess
-                                                , Pid
-                                                , getPid
-                                                , CreateProcess(..)
-                                                , CmdSpec
-                                                  ( ShellCommand
-                                                  , RawCommand
-                                                  )
-                                                , StdStream(CreatePipe)
-                                                , terminateProcess
-                                                , waitForProcess
-                                                )
-import           System.IO                      ( Handle )
-import           System.Exit                    ( ExitCode )
-import           NixManager.Bash                ( Expr(Command)
-                                                , argText
-                                                , evalExpr
-                                                )
-import           Data.Text                      ( unpack )
-import           Data.Text.IO                   ( putStrLn )
-import           Prelude                 hiding ( putStrLn )
-import           GHC.Generics                   ( Generic )
-import           Data.Generics.Labels           ( )
+import           Control.Lens         (view, (^.))
+import           Data.ByteString      (ByteString, hGetContents,
+                                       hGetNonBlocking, hPutStr)
+import           Data.Foldable        (for_)
+import           Data.Generics.Labels ()
+import           Data.Monoid          (First (First))
+import           Data.Text            (unpack)
+import           Data.Text.IO         (putStrLn)
+import           GHC.Generics         (Generic)
+import           NixManager.Bash      (Expr (Command), argText, evalExpr)
+import           Prelude              hiding (putStrLn)
+import           System.Exit          (ExitCode)
+import           System.IO            (Handle)
+import           System.Process       (CmdSpec (RawCommand, ShellCommand),
+                                       CreateProcess (..), Pid, ProcessHandle,
+                                       StdStream (CreatePipe), createProcess,
+                                       getPid, getProcessExitCode,
+                                       terminateProcess, waitForProcess)
 
 -- | Represents all the data needed to handle a running process
 data ProcessData = ProcessData {
-    stdoutHandle :: Handle -- ^ The handle to stdout
-  , stderrHandle :: Handle -- ^ The handle to stderr
+    stdoutHandle  :: Handle -- ^ The handle to stdout
+  , stderrHandle  :: Handle -- ^ The handle to stderr
   , processHandle :: ProcessHandle -- ^ The process handle
   } deriving(Generic)
 

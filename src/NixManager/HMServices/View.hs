@@ -1,38 +1,23 @@
+{-# LANGUAGE FlexibleContexts  #-}
+{-# LANGUAGE OverloadedLabels  #-}
+{-# LANGUAGE OverloadedLists   #-}
 {-# LANGUAGE OverloadedStrings #-}
-{-# LANGUAGE OverloadedLabels #-}
-{-# LANGUAGE FlexibleContexts #-}
-{-# LANGUAGE OverloadedLists #-}
 module NixManager.HMServices.View
   ( servicesBox
   )
 where
 
-import qualified NixManager.View.IconName      as IconName
-import           NixManager.View.GtkUtil        ( expandAndFill )
-import           GI.Gtk.Declarative             ( bin
-                                                , BoxChild(BoxChild)
-                                                , container
-                                                )
-import qualified GI.Gtk                        as Gtk
-import           Control.Lens                   ( (^.) )
-import           NixManager.HMServices.Event    ( Event
-                                                  ( EventReload
-                                                  , EventEditView
-                                                  )
-                                                )
-import           NixManager.ManagerEvent        ( ManagerEvent
-                                                  ( ManagerEventHMServices
-                                                  )
-                                                )
-import           NixManager.Services.View       ( noticeBox )
-import           NixManager.HMServices.State    ( State
-                                                  ( NoHomeManager
-                                                  , InvalidHomeManager
-                                                  , HomeManagerPresent
-                                                  )
-                                                )
-import           NixManager.View.ServiceEditView
-                                                ( editView )
+import           Control.Lens                    ((^.))
+import qualified GI.Gtk                          as Gtk
+import           GI.Gtk.Declarative              (BoxChild (BoxChild), bin,
+                                                  container)
+import           NixManager.HMServices.Event     (Event (EventEditView, EventReload))
+import           NixManager.HMServices.State     (State (HomeManagerPresent, InvalidHomeManager, NoHomeManager))
+import           NixManager.ManagerEvent         (ManagerEvent (ManagerEventHMServices))
+import           NixManager.Services.View        (noticeBox)
+import           NixManager.View.GtkUtil         (expandAndFill)
+import qualified NixManager.View.IconName        as IconName
+import           NixManager.View.ServiceEditView (editView)
 
 servicesBox' NoHomeManager _ = bin Gtk.ScrolledWindow [] $ noticeBox
   IconName.DialogError

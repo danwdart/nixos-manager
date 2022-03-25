@@ -15,19 +15,10 @@ module NixManager.Bash
   )
 where
 
-import           NixManager.Util                ( surround )
-import           Data.Text                      ( Text
-                                                , unwords
-                                                , replace
-                                                , isInfixOf
-                                                , pack
-                                                )
-import           Data.String                    ( IsString
-                                                , fromString
-                                                )
-import           Prelude                 hiding ( unwords
-                                                , elem
-                                                )
+import           Data.String     (IsString, fromString)
+import           Data.Text       (Text, isInfixOf, pack, replace, unwords)
+import           NixManager.Util (surround)
+import           Prelude         hiding (elem, unwords)
 
 
 -- | The type of bash argument

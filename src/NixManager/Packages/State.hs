@@ -8,12 +8,9 @@ module NixManager.Packages.State
   )
 where
 
-import           NixManager.NixPackagesUtil     ( readPackageCache )
-import           NixManager.Util                ( TextualError
-                                                , ifSuccessIO
-                                                )
-import qualified NixManager.View.PackageEditView
-                                               as PackageEditView
+import           NixManager.NixPackagesUtil      (readPackageCache)
+import           NixManager.Util                 (TextualError, ifSuccessIO)
+import qualified NixManager.View.PackageEditView as PackageEditView
 
 type State = PackageEditView.State
 

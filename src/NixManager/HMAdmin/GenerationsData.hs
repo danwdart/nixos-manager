@@ -1,4 +1,4 @@
-{-# LANGUAGE DeriveGeneric #-}
+{-# LANGUAGE DeriveGeneric    #-}
 {-# LANGUAGE OverloadedLabels #-}
 {-|
   Description: State data for the home-manager generations view in case the generations command succeeded
@@ -10,19 +10,17 @@ module NixManager.HMAdmin.GenerationsData
   )
 where
 
-import           NixManager.HMGenerations       ( GenerationLine )
-import           NixManager.Message             ( Message )
-import           Control.Lens                   ( Traversal'
-                                                , traversed
-                                                )
-import           NixManager.Util                ( indirectIndexTraversal )
-import           GHC.Generics                   ( Generic )
+import           Control.Lens             (Traversal', traversed)
+import           GHC.Generics             (Generic)
+import           NixManager.HMGenerations (GenerationLine)
+import           NixManager.Message       (Message)
+import           NixManager.Util          (indirectIndexTraversal)
 
 -- | State data for the home-manager generations view in case the generations command succeeded
 data GenerationsData = GenerationsData {
     selectedGenerationIdx :: Maybe Int -- ^ Currently selected generation, if any
-  , message :: Maybe Message -- ^ A message to display (for example, about a success while switching generations)
-  , generations :: [GenerationLine] -- ^ The actual generations
+  , message               :: Maybe Message -- ^ A message to display (for example, about a success while switching generations)
+  , generations           :: [GenerationLine] -- ^ The actual generations
   } deriving(Generic)
 
 -- | Traversal over the currently selected generation(s)

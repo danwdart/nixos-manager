@@ -3,12 +3,12 @@
 
 Declarative @ComboBoxText@ wrapper.
   -}
-{-# LANGUAGE NamedFieldPuns #-}
-{-# LANGUAGE TypeFamilies #-}
-{-# LANGUAGE OverloadedLabels #-}
-{-# LANGUAGE FlexibleContexts #-}
-{-# LANGUAGE OverloadedLists #-}
+{-# LANGUAGE FlexibleContexts  #-}
+{-# LANGUAGE NamedFieldPuns    #-}
+{-# LANGUAGE OverloadedLabels  #-}
+{-# LANGUAGE OverloadedLists   #-}
 {-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE TypeFamilies      #-}
 module NixManager.View.ComboBox
   ( comboBox
   , ComboBoxChangeEvent(ComboBoxChangeEvent)
@@ -16,29 +16,19 @@ module NixManager.View.ComboBox
   )
 where
 
-import           Data.Vector                    ( Vector )
-import           GI.Gtk.Declarative.EventSource ( fromCancellation )
-import qualified GI.GObject                    as GI
-import           Control.Monad                  ( when
-                                                , forM_
-                                                , void
-                                                )
-import           GI.Gtk.Declarative             ( Widget(Widget)
-                                                , CustomWidget(CustomWidget)
-                                                , customWidget
-                                                , customCreate
-                                                , Attribute
-                                                , customPatch
-                                                , customSubscribe
-                                                , customAttributes
-                                                , customParams
-                                                , CustomPatch
-                                                  ( CustomKeep
-                                                  , CustomModify
-                                                  )
-                                                )
-import           Data.Text                      ( Text )
-import qualified GI.Gtk                        as Gtk
+import           Control.Monad                  (forM_, void, when)
+import           Data.Text                      (Text)
+import           Data.Vector                    (Vector)
+import qualified GI.GObject                     as GI
+import qualified GI.Gtk                         as Gtk
+import           GI.Gtk.Declarative             (Attribute,
+                                                 CustomPatch (CustomKeep, CustomModify),
+                                                 CustomWidget (CustomWidget),
+                                                 Widget (Widget),
+                                                 customAttributes, customCreate,
+                                                 customParams, customPatch,
+                                                 customSubscribe, customWidget)
+import           GI.Gtk.Declarative.EventSource (fromCancellation)
 
 -- | The ComboBox properties
 data ComboBoxProperties = ComboBoxProperties {

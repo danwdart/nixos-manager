@@ -1,9 +1,9 @@
 {-|
   Description: Parser and types for Nix expressions (will be superseded by hnix in due time)
   -}
+{-# LANGUAGE DeriveGeneric     #-}
+{-# LANGUAGE OverloadedLabels  #-}
 {-# LANGUAGE OverloadedStrings #-}
-{-# LANGUAGE OverloadedLabels #-}
-{-# LANGUAGE DeriveGeneric #-}
 module NixManager.NixExpr
   ( parseNixFile
   , parseNixString
@@ -15,62 +15,31 @@ module NixManager.NixExpr
   )
 where
 
-import           System.FilePath                ( dropFileName )
-import           System.Directory               ( doesFileExist
-                                                , createDirectoryIfMissing
-                                                )
-import           NixManager.Util                ( showText
-                                                , parseSafe
-                                                , TextualError
-                                                )
-import           Data.Bifunctor                 ( first )
-import           Control.Monad                  ( void )
-import           Data.Functor                   ( ($>) )
-import           Text.Megaparsec                ( Parsec
-                                                , manyTill
-                                                , sepBy
-                                                , many
-                                                , errorBundlePretty
-                                                , try
-                                                , parse
-                                                , (<|>)
-                                                , (<?>)
-                                                )
-import           Prelude                 hiding ( readFile
-                                                , unwords
-                                                , writeFile
-                                                )
-import           Data.Void                      ( Void )
-import           Data.Text.IO                   ( readFile
-                                                , writeFile
-                                                )
-import           Data.Text                      ( Text
-                                                , intercalate
-                                                , unwords
-                                                , replace
-                                                , pack
-                                                )
-import           Data.Map.Strict                ( Map
-                                                , fromList
-                                                , toList
-                                                )
-import qualified Text.Megaparsec.Char.Lexer    as L
-import           Text.Megaparsec.Char           ( space1
-                                                , letterChar
-                                                , alphaNumChar
-                                                , char
-                                                , string
-                                                )
-import           Control.Applicative            ( empty )
-import           Control.Lens                   ( makePrisms
-                                                , makeLenses
-                                                , to
-                                                , (^..)
-                                                , traversed
-                                                , (^.)
-                                                )
-import           GHC.Generics                   ( Generic )
-import           Data.Generics.Labels           ( )
+import           Control.Applicative        (empty)
+import           Control.Lens               (makeLenses, makePrisms, to,
+                                             traversed, (^.), (^..))
+import           Control.Monad              (void)
+import           Data.Bifunctor             (first)
+import           Data.Functor               (($>))
+import           Data.Generics.Labels       ()
+import           Data.Map.Strict            (Map, fromList, toList)
+import           Data.Text                  (Text, intercalate, pack, replace,
+                                             unwords)
+import           Data.Text.IO               (readFile, writeFile)
+import           Data.Void                  (Void)
+import           GHC.Generics               (Generic)
+import           NixManager.Util            (TextualError, parseSafe, showText)
+import           Prelude                    hiding (readFile, unwords,
+                                             writeFile)
+import           System.Directory           (createDirectoryIfMissing,
+                                             doesFileExist)
+import           System.FilePath            (dropFileName)
+import           Text.Megaparsec            (Parsec, errorBundlePretty, many,
+                                             manyTill, parse, sepBy, try, (<?>),
+                                             (<|>))
+import           Text.Megaparsec.Char       (alphaNumChar, char, letterChar,
+                                             space1, string)
+import qualified Text.Megaparsec.Char.Lexer as L
 
 -- | All information pertaining to Nix functions. Arguments are simplified to strings here, since we don’t need more, currently.
 data NixFunction = NixFunction {
@@ -242,7 +211,7 @@ exprParser =
 parseNixString :: Text -> TextualError NixExpr
 parseNixString = parseSafe exprParser "string expression"
 
--- | Parses a file (which may not exist, in which case a default is returned), returns the containing Nix expression or an error. 
+-- | Parses a file (which may not exist, in which case a default is returned), returns the containing Nix expression or an error.
 parseNixFile :: FilePath -> NixExpr -> IO (TextualError NixExpr)
 parseNixFile fn defExpr = do
   exists <- doesFileExist fn

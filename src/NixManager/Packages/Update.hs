@@ -2,56 +2,32 @@
   Description: Contains the update logic for the Packages tab
 Contains the update logic for the Packages tab
   -}
-{-# LANGUAGE OverloadedLabels #-}
-{-# LANGUAGE FlexibleContexts #-}
+{-# LANGUAGE FlexibleContexts  #-}
+{-# LANGUAGE OverloadedLabels  #-}
 {-# LANGUAGE OverloadedStrings #-}
 module NixManager.Packages.Update
   ( updateEvent
   )
 where
 
-import           Data.Functor                   ( ($>) )
-import           Data.Validation                ( Validation(Failure, Success)
-                                                , bindValidation
-                                                )
-import           Control.Lens                   ( (&)
-                                                , (?~)
-                                                , (.~)
-                                                , (^?)
-                                                )
-import           NixManager.ManagerState        ( ManagerState(..) )
-import           NixManager.Packages.Event      ( Event
-                                                  ( EventOperationCompleted
-                                                  , EventInstallCompleted
-                                                  , EventUninstallCompleted
-                                                  , EventReload
-                                                  , EventReloadFinished
-                                                  , EventPackageEditView
-                                                  )
-                                                )
-import qualified NixManager.Admin.Event        as AdminEvent
-import           NixManager.Message             ( errorMessage
-                                                , infoMessage
-                                                , Message
-                                                )
-import           NixManager.ManagerEvent        ( ManagerEvent
-                                                  ( ManagerEventPackages
-                                                  )
-                                                , pureTransition
-                                                , liftUpdate
-                                                , packagesEvent
-                                                , adminEvent
-                                                )
-import           NixManager.NixPackagesUtil     ( installPackage
-                                                , readPackageCache
-                                                , uninstallPackage
-                                                )
-import           GI.Gtk.Declarative.App.Simple  ( Transition(Transition) )
-import           Prelude                 hiding ( length
-                                                , putStrLn
-                                                )
-import qualified NixManager.View.PackageEditView
-                                               as PEV
+import           Control.Lens                    ((&), (.~), (?~), (^?))
+import           Data.Functor                    (($>))
+import           Data.Validation                 (Validation (Failure, Success),
+                                                  bindValidation)
+import           GI.Gtk.Declarative.App.Simple   (Transition (Transition))
+import qualified NixManager.Admin.Event          as AdminEvent
+import           NixManager.ManagerEvent         (ManagerEvent (ManagerEventPackages),
+                                                  adminEvent, liftUpdate,
+                                                  packagesEvent, pureTransition)
+import           NixManager.ManagerState         (ManagerState (..))
+import           NixManager.Message              (Message, errorMessage,
+                                                  infoMessage)
+import           NixManager.NixPackagesUtil      (installPackage,
+                                                  readPackageCache,
+                                                  uninstallPackage)
+import           NixManager.Packages.Event       (Event (EventInstallCompleted, EventOperationCompleted, EventPackageEditView, EventReload, EventReloadFinished, EventUninstallCompleted))
+import qualified NixManager.View.PackageEditView as PEV
+import           Prelude                         hiding (length, putStrLn)
 
 -- | What message to display when the install operation completes
 installCompletedMessage :: PEV.InstallationType -> Message

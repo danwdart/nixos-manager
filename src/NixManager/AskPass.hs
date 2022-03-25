@@ -1,8 +1,8 @@
 {-|
   Description: Tools to wrap “sudo” and “gksudo” using the "NixManager.Bash" module.
   -}
-{-# LANGUAGE OverloadedStrings #-}
-{-# LANGUAGE OverloadedLists #-}
+{-# LANGUAGE OverloadedLists     #-}
+{-# LANGUAGE OverloadedStrings   #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 module NixManager.AskPass
   ( sudoExpr
@@ -10,16 +10,10 @@ module NixManager.AskPass
   )
 where
 
-import           Data.Text                      ( Text )
-import           NixManager.Bash                ( Expr(Command)
-                                                , Arg(LiteralArg)
-                                                , evalExpr
-                                                )
-import           Prelude                 hiding ( readFile )
-import           NixManager.Process             ( runProcess
-                                                , noStdin
-                                                , ProcessData
-                                                )
+import           Data.Text          (Text)
+import           NixManager.Bash    (Arg (LiteralArg), Expr (Command), evalExpr)
+import           NixManager.Process (ProcessData, noStdin, runProcess)
+import           Prelude            hiding (readFile)
 
 
 -- |Transform the expression, evaluating it inside a sudo expression

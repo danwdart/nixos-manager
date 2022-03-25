@@ -13,12 +13,10 @@ module NixManager.Services.ServiceCategory
   )
 where
 
-import           Data.Maybe                     ( fromJust )
-import           Data.Text                      ( Text )
-import           Control.Lens                   ( Iso'
-                                                , iso
-                                                )
-import           Data.List                      ( elemIndex )
+import           Control.Lens (Iso', iso)
+import           Data.List    (elemIndex)
+import           Data.Maybe   (fromJust)
+import           Data.Text    (Text)
 
 -- | All values for the service category combobox
 data ServiceCategory = ServiceCategoryServices

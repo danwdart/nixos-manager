@@ -2,9 +2,9 @@
   Description: Contains code to read and manipulate home-manager’s generations
 Contains code to read and manipulate home-manager’s generations
 -}
+{-# LANGUAGE DeriveGeneric     #-}
+{-# LANGUAGE OverloadedLabels  #-}
 {-# LANGUAGE OverloadedStrings #-}
-{-# LANGUAGE OverloadedLabels #-}
-{-# LANGUAGE DeriveGeneric #-}
 module NixManager.HMGenerations
   ( readGenerations
   , removeGeneration
@@ -13,66 +13,38 @@ module NixManager.HMGenerations
   )
 where
 
-import           Data.Validation                ( Validation(Failure) )
-import           System.Exit                    ( ExitCode(ExitFailure) )
-import           NixManager.Process             ( runProcessToFinish
-                                                , noStdin
-                                                )
-import           Control.Lens                   ( (^?!)
-                                                , to
-                                                , folded
-                                                , (^.)
-                                                )
-import           Data.Monoid                    ( getFirst )
-import           NixManager.Bash                ( Expr(Command)
-                                                , Arg(LiteralArg)
-                                                )
-import           NixManager.Util                ( TextualError
-                                                , parseSafe
-                                                , showText
-                                                , decodeUtf8
-                                                , addToError
-                                                )
-import           Control.Monad                  ( void )
-import           Data.Void                      ( Void )
-import           Text.Megaparsec                ( Parsec
-                                                , takeWhile1P
-                                                , parse
-                                                , errorBundlePretty
-                                                , sepEndBy
-                                                )
-import           Text.Megaparsec.Byte           ( char
-                                                , newline
-                                                , string
-                                                )
-import           Data.ByteString                ( ByteString )
-import           Data.ByteString.Char8          ( unpack )
-import           Data.Char                      ( ord )
-import           Data.Bifunctor                 ( first )
-import           Data.Time.Clock                ( UTCTime )
-import           Data.Time.LocalTime            ( TimeZone
-                                                , localTimeToUTC
-                                                , LocalTime
-                                                , getZonedTime
-                                                , ZonedTime
-                                                , zonedTimeZone
-                                                , zonedTimeToUTC
-                                                )
-import           Data.Time.Format               ( parseTimeM
-                                                , defaultTimeLocale
-                                                )
-import           Data.Text                      ( Text
-                                                , pack
-                                                )
-import           Text.Time.Pretty               ( prettyTimeAuto )
-import           GHC.Generics                   ( Generic )
+import           Control.Lens          (folded, to, (^.), (^?!))
+import           Control.Monad         (void)
+import           Data.Bifunctor        (first)
+import           Data.ByteString       (ByteString)
+import           Data.ByteString.Char8 (unpack)
+import           Data.Char             (ord)
+import           Data.Monoid           (getFirst)
+import           Data.Text             (Text, pack)
+import           Data.Time.Clock       (UTCTime)
+import           Data.Time.Format      (defaultTimeLocale, parseTimeM)
+import           Data.Time.LocalTime   (LocalTime, TimeZone, ZonedTime,
+                                        getZonedTime, localTimeToUTC,
+                                        zonedTimeToUTC, zonedTimeZone)
+import           Data.Validation       (Validation (Failure))
+import           Data.Void             (Void)
+import           GHC.Generics          (Generic)
+import           NixManager.Bash       (Arg (LiteralArg), Expr (Command))
+import           NixManager.Process    (noStdin, runProcessToFinish)
+import           NixManager.Util       (TextualError, addToError, decodeUtf8,
+                                        parseSafe, showText)
+import           System.Exit           (ExitCode (ExitFailure))
+import           Text.Megaparsec       (Parsec, errorBundlePretty, parse,
+                                        sepEndBy, takeWhile1P)
+import           Text.Megaparsec.Byte  (char, newline, string)
+import           Text.Time.Pretty      (prettyTimeAuto)
 
 -- | One home-manager generation line
 data GenerationLine = GenerationLine {
-    date :: UTCTime -- ^ The parsed activation date for the generation
+    date       :: UTCTime -- ^ The parsed activation date for the generation
   , datePretty :: Text -- ^ The prettified, human-readable date for the generation
-  , genId :: ByteString -- ^ The generation’s id, here as a text, since I wasn’t sure if it’s always numeric
-  , path :: ByteString -- ^ The generation’s path, which is vital for activating it
+  , genId      :: ByteString -- ^ The generation’s id, here as a text, since I wasn’t sure if it’s always numeric
+  , path       :: ByteString -- ^ The generation’s path, which is vital for activating it
   } deriving(Show, Generic)
 
 -- | Parsec type for the parser.
@@ -86,7 +58,7 @@ wordParser = takeWhile1P Nothing (/= fromIntegral (ord ' '))
 nonEolParser :: Parser ByteString
 nonEolParser = takeWhile1P Nothing (/= fromIntegral (ord '\n'))
 
--- | Parse home-manager’s time format 
+-- | Parse home-manager’s time format
 parseTime :: String -> Maybe LocalTime
 parseTime = parseTimeM False defaultTimeLocale "%0Y-%m-%d %H:%M"
 

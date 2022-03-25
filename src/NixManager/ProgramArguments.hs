@@ -3,15 +3,15 @@
 Contains "ProgramArguments" for the manager plus a parser for that
   -}
 {-# LANGUAGE DeriveGeneric #-}
-{-# LANGUAGE LambdaCase #-}
+{-# LANGUAGE LambdaCase    #-}
 module NixManager.ProgramArguments
   ( ProgramArguments
   , parseArguments
   )
 where
 
-import           System.Environment             ( getArgs )
-import           GHC.Generics                   ( Generic )
+import           GHC.Generics       (Generic)
+import           System.Environment (getArgs)
 
 newtype ProgramArguments = ProgramArguments {
   useHomeManager :: Bool

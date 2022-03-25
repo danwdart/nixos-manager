@@ -9,24 +9,19 @@ module NixManager.View.ProgressBar
   )
 where
 
-import           GI.Gtk.Declarative.Attributes.Internal
-                                                ( addSignalHandler )
-import           Data.Vector                    ( Vector )
-import           GI.Gtk.Declarative             ( Widget(Widget)
-                                                , CustomWidget(CustomWidget)
-                                                , customWidget
-                                                , customCreate
-                                                , Attribute
-                                                , customPatch
-                                                , customSubscribe
-                                                , customAttributes
-                                                , customParams
-                                                , CustomPatch
-                                                  ( CustomKeep
-                                                  , CustomModify
-                                                  )
-                                                )
-import qualified GI.Gtk                        as Gtk
+import           Data.Vector                            (Vector)
+import qualified GI.Gtk                                 as Gtk
+import           GI.Gtk.Declarative                     (Attribute,
+                                                         CustomPatch (CustomKeep, CustomModify),
+                                                         CustomWidget (CustomWidget),
+                                                         Widget (Widget),
+                                                         customAttributes,
+                                                         customCreate,
+                                                         customParams,
+                                                         customPatch,
+                                                         customSubscribe,
+                                                         customWidget)
+import           GI.Gtk.Declarative.Attributes.Internal (addSignalHandler)
 
 
 -- | Create a progress bar widget. It’s currently not “percentage-based”, but has to be regularly “pulsed” to show that something is happening. You can do this by incrementing (or changing) the integer you provide here.

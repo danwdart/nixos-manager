@@ -2,9 +2,9 @@
   Description: Contains all functions relating to the service JSON download
 Contains all functions relating to the service JSON download
   -}
-{-# LANGUAGE DeriveGeneric #-}
+{-# LANGUAGE DeriveGeneric     #-}
+{-# LANGUAGE OverloadedLabels  #-}
 {-# LANGUAGE OverloadedStrings #-}
-{-# LANGUAGE OverloadedLabels #-}
 module NixManager.Services.Download
   ( result
   , start
@@ -14,49 +14,25 @@ module NixManager.Services.Download
   )
 where
 
-import           GHC.Generics                   ( Generic )
-import           Data.Validation                ( Validation(Success, Failure) )
-import           System.Exit                    ( ExitCode
-                                                  ( ExitSuccess
-                                                  , ExitFailure
-                                                  )
-                                                )
-import           Prelude                 hiding ( writeFile )
-import           System.FilePath                ( dropFileName )
-import           System.Directory               ( createDirectoryIfMissing )
-import           NixManager.Bash                ( Expr(Command)
-                                                , Arg(RawArg)
-                                                )
-import           NixManager.Process             ( runProcessToFinish
-                                                , noStdin
-                                                )
-import           NixManager.NixServiceOption    ( desiredOptionsFileLocation )
-import           Control.Exception              ( try
-                                                , SomeException
-                                                )
-import           Control.Concurrent.MVar        ( MVar
-                                                , newEmptyMVar
-                                                , putMVar
-                                                , tryTakeMVar
-                                                )
-import           Control.Concurrent             ( forkIO
-                                                , ThreadId
-                                                , killThread
-                                                )
-import           NixManager.Util                ( TextualError
-                                                , decodeUtf8
-                                                , showText
-                                                )
-import           Control.Lens                   ( view
-                                                , to
-                                                , (^.)
-                                                , (^?!)
-                                                )
-import           Data.ByteString.Lazy           ( ByteString
-                                                , writeFile
-                                                )
-import           Data.Text                      ( pack )
-import           Data.Monoid                    ( getFirst )
+import           Control.Concurrent          (ThreadId, forkIO, killThread)
+import           Control.Concurrent.MVar     (MVar, newEmptyMVar, putMVar,
+                                              tryTakeMVar)
+import           Control.Exception           (SomeException, try)
+import           Control.Lens                (to, view, (^.), (^?!))
+import           Data.ByteString.Lazy        (ByteString, writeFile)
+import           Data.Monoid                 (getFirst)
+import           Data.Text                   (pack)
+import           Data.Validation             (Validation (Failure, Success))
+import           GHC.Generics                (Generic)
+import           NixManager.Bash             (Arg (RawArg), Expr (Command))
+import           NixManager.NixServiceOption (desiredOptionsFileLocation)
+import           NixManager.Process          (noStdin, runProcessToFinish)
+import           NixManager.Util             (TextualError, decodeUtf8,
+                                              showText)
+import           Prelude                     hiding (writeFile)
+import           System.Directory            (createDirectoryIfMissing)
+import           System.Exit                 (ExitCode (ExitFailure, ExitSuccess))
+import           System.FilePath             (dropFileName)
 
 -- | When the download finishes, this type contains either an error or the filepath to the downloaded file
 type DownloadResult = TextualError FilePath
@@ -66,7 +42,7 @@ type DownloadVar = MVar DownloadResult
 
 -- | The current state of the download
 data DownloadState = DownloadState {
-    var :: DownloadVar -- ^ The mutex to check
+    var      :: DownloadVar -- ^ The mutex to check
   , threadId :: ThreadId -- ^ The thread we started the download in
   } deriving(Generic)
 

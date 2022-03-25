@@ -12,12 +12,10 @@ module NixManager.PackageCategory
   )
 where
 
-import           Data.List                      ( elemIndex )
-import           Data.Maybe                     ( fromJust )
-import           Data.Text                      ( Text )
-import           Control.Lens                   ( Iso'
-                                                , iso
-                                                )
+import           Control.Lens (Iso', iso)
+import           Data.List    (elemIndex)
+import           Data.Maybe   (fromJust)
+import           Data.Text    (Text)
 
 -- | All the choices for the category combobox
 data PackageCategory = PackageCategoryAll -- ^ Display all packages

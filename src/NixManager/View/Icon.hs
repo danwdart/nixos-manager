@@ -3,37 +3,30 @@
 
 An icon widget
   -}
-{-# LANGUAGE NamedFieldPuns #-}
-{-# LANGUAGE TypeFamilies #-}
-{-# LANGUAGE FlexibleContexts #-}
+{-# LANGUAGE FlexibleContexts  #-}
+{-# LANGUAGE NamedFieldPuns    #-}
 {-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE TypeFamilies      #-}
 module NixManager.View.Icon
   ( icon
   , IconProps(IconProps)
   )
 where
 
-import           GI.Gtk.Declarative.Attributes.Internal
-                                                ( addSignalHandler )
-import           Data.Vector                    ( Vector )
-import           GI.Gtk.Declarative             ( Widget(Widget)
-                                                , CustomWidget(CustomWidget)
-                                                , customWidget
-                                                , customCreate
-                                                , Attribute
-                                                , customPatch
-                                                , customSubscribe
-                                                , customAttributes
-                                                , customParams
-                                                , CustomPatch
-                                                  ( CustomKeep
-                                                  , CustomModify
-                                                  )
-                                                )
-import qualified GI.Gtk                        as Gtk
-import           NixManager.View.IconName       ( IconName
-                                                , nameToGtk
-                                                )
+import           Data.Vector                            (Vector)
+import qualified GI.Gtk                                 as Gtk
+import           GI.Gtk.Declarative                     (Attribute,
+                                                         CustomPatch (CustomKeep, CustomModify),
+                                                         CustomWidget (CustomWidget),
+                                                         Widget (Widget),
+                                                         customAttributes,
+                                                         customCreate,
+                                                         customParams,
+                                                         customPatch,
+                                                         customSubscribe,
+                                                         customWidget)
+import           GI.Gtk.Declarative.Attributes.Internal (addSignalHandler)
+import           NixManager.View.IconName               (IconName, nameToGtk)
 
 -- | An icon’s properties
 data IconProps = IconProps {

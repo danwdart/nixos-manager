@@ -1,5 +1,5 @@
-{-# LANGUAGE OverloadedLabels #-}
 {-# LANGUAGE FlexibleContexts #-}
+{-# LANGUAGE OverloadedLabels #-}
 {-|
   Description: Trampoline module for all the update functions (for the separate tabs)
   -}
@@ -8,21 +8,18 @@ module NixManager.Update
   )
 where
 
+import           Control.Lens                  ((^.))
+import           GI.Gtk.Declarative.App.Simple (Transition (Exit))
 import qualified NixManager.Admin.Update       as AdminUpdate
-import qualified NixManager.Services.Update    as ServicesUpdate
-import qualified NixManager.Packages.Update    as PackagesUpdate
+import qualified NixManager.HMAdmin.Update     as HMAdminUpdate
 import qualified NixManager.HMPackages.Update  as HMPackagesUpdate
 import qualified NixManager.HMServices.Update  as HMServicesUpdate
-import qualified NixManager.HMAdmin.Update     as HMAdminUpdate
-import           Control.Lens                   ( (^.) )
-import           NixManager.ManagerState        ( ManagerState(..) )
-import           NixManager.ManagerEvent        ( ManagerEvent(..)
-                                                , pureTransition
-                                                )
-import           GI.Gtk.Declarative.App.Simple  ( Transition(Exit) )
-import           Prelude                 hiding ( length
-                                                , putStrLn
-                                                )
+import           NixManager.ManagerEvent       (ManagerEvent (..),
+                                                pureTransition)
+import           NixManager.ManagerState       (ManagerState (..))
+import qualified NixManager.Packages.Update    as PackagesUpdate
+import qualified NixManager.Services.Update    as ServicesUpdate
+import           Prelude                       hiding (length, putStrLn)
 
 
 -- | Process an event, change the state, and potentially emit an event and some side-effects

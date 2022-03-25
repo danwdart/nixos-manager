@@ -6,9 +6,9 @@ CSS styles and CSS initialization (see https://developer.gnome.org/gtk3/stable/c
 {-# LANGUAGE OverloadedStrings #-}
 module NixManager.View.Css where
 
-import           Data.ByteString                ( ByteString )
-import qualified GI.Gdk                        as Gdk
-import qualified GI.Gtk                        as Gtk
+import           Data.ByteString (ByteString)
+import qualified GI.Gdk          as Gdk
+import qualified GI.Gtk          as Gtk
 
 -- | Global app Stylesheet
 styles :: ByteString

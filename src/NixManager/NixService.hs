@@ -2,7 +2,7 @@
   Description: Contains the "NixService" type (representing a service plus its options), and companion functions
 Contains the "NixService" type (representing a service plus its options), and companion functions
   -}
-{-# LANGUAGE DeriveGeneric #-}
+{-# LANGUAGE DeriveGeneric    #-}
 {-# LANGUAGE OverloadedLabels #-}
 module NixManager.NixService
   ( NixService(NixService)
@@ -12,29 +12,21 @@ module NixManager.NixService
   )
 where
 
-import           NixManager.NixLocation         ( NixLocation
-                                                , removeLastComponent
-                                                , isPrefixOf
-                                                )
-import           NixManager.NixServiceOption    ( NixServiceOption )
-import           Data.Text                      ( Text )
-import           Data.Map.Strict                ( Map
-                                                , elems
-                                                , insertWith
-                                                , toList
-                                                )
-import qualified Data.Set                      as Set
-import           NixManager.Util                ( Endo )
-import           Control.Lens                   ( (^.)
-                                                , view
-                                                )
-import           Data.Maybe                     ( mapMaybe )
-import           GHC.Generics                   ( Generic )
-import           Data.Generics.Labels           ( )
+import           Control.Lens                (view, (^.))
+import           Data.Generics.Labels        ()
+import           Data.Map.Strict             (Map, elems, insertWith, toList)
+import           Data.Maybe                  (mapMaybe)
+import qualified Data.Set                    as Set
+import           Data.Text                   (Text)
+import           GHC.Generics                (Generic)
+import           NixManager.NixLocation      (NixLocation, isPrefixOf,
+                                              removeLastComponent)
+import           NixManager.NixServiceOption (NixServiceOption)
+import           NixManager.Util             (Endo)
 
 -- | Represents a service with a location and some options.
 data NixService = NixService {
-    serviceLoc :: NixLocation -- ^ Service location
+    serviceLoc     :: NixLocation -- ^ Service location
   , serviceOptions :: [NixServiceOption] -- ^ Service options
   } deriving(Show, Generic)
 

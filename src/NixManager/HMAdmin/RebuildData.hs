@@ -9,20 +9,17 @@ module NixManager.HMAdmin.RebuildData
   )
 where
 
-import           NixManager.Process             ( ProcessOutput )
-import           NixManager.HMAdmin.BuildState  ( BuildState )
-import           NixManager.View.DetailsState   ( DetailsState
-                                                  ( DetailsContracted
-                                                  )
-                                                )
-import           GHC.Generics                   ( Generic )
+import           GHC.Generics                  (Generic)
+import           NixManager.HMAdmin.BuildState (BuildState)
+import           NixManager.Process            (ProcessOutput)
+import           NixManager.View.DetailsState  (DetailsState (DetailsContracted))
 
 -- | Contains all data for the rebuild GUI
 data RebuildData = RebuildData {
-    processOutput :: ProcessOutput  -- ^ Output of the current or last rebuild process (possibly empty)
-  , buildState :: Maybe BuildState  -- ^ Contains the current build state of the rebuild
+    processOutput        :: ProcessOutput  -- ^ Output of the current or last rebuild process (possibly empty)
+  , buildState           :: Maybe BuildState  -- ^ Contains the current build state of the rebuild
   , activeRebuildModeIdx :: Int -- ^ Index of the active rebuild mode, see "NixManager.HMAdmin.RebuildMode"
-  , detailsState :: DetailsState -- ^ Are the Details expanded?
+  , detailsState         :: DetailsState -- ^ Are the Details expanded?
   } deriving(Generic)
 
 -- | The initial rebuild state

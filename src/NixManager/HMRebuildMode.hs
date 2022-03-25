@@ -12,12 +12,10 @@ module NixManager.HMRebuildMode
   )
 where
 
-import           Data.Text                      ( Text )
-import           Control.Lens                   ( iso
-                                                , Iso'
-                                                )
-import           Data.List                      ( elemIndex )
-import           Data.Maybe                     ( fromJust )
+import           Control.Lens (Iso', iso)
+import           Data.List    (elemIndex)
+import           Data.Maybe   (fromJust)
+import           Data.Text    (Text)
 
 -- | Specifies home-manager’s rebuild modes
 data HMRebuildMode = RebuildSwitch -- ^ Corresponds to @home-manager switch@

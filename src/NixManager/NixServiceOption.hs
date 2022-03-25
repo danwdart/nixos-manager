@@ -2,9 +2,9 @@
   Description: Provides the type for a service option, as read from the @options.json@ file as well as functions to read and write it.
 Provides the type for a service option, as read from the @options.json@ file as well as functions to read and write it.
   -}
-{-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE DeriveGeneric       #-}
+{-# LANGUAGE OverloadedStrings   #-}
 {-# LANGUAGE ScopedTypeVariables #-}
-{-# LANGUAGE DeriveGeneric #-}
 
 module NixManager.NixServiceOption
   ( NixServiceOption
@@ -18,44 +18,33 @@ module NixManager.NixServiceOption
   )
 where
 
-import           System.FilePath                ( (</>) )
-import           NixManager.Constants           ( appName )
-import           Data.String                    ( IsString )
-import           System.Directory               ( getXdgDirectory
-                                                , XdgDirectory(XdgCache)
-                                                , doesFileExist
-                                                )
-import           Control.Monad                  ( mzero )
-import           Prelude                 hiding ( readFile )
-import           Data.Map.Strict                ( Map )
-import           NixManager.Util                ( TextualError
-                                                , addToError
-                                                , fromStringEither
-                                                )
-import           Data.ByteString.Lazy           ( ByteString
-                                                , readFile
-                                                )
-import           Data.Text                      ( Text )
-import           NixManager.NixLocation         ( NixLocation(NixLocation) )
-import           NixManager.NixServiceOptionType
-                                                ( NixServiceOptionType
-                                                , parseNixServiceOptionType
-                                                )
-import           NixManager.NixExpr             ( NixExpr )
-import           Data.Aeson                     ( FromJSON
-                                                , parseJSON
-                                                , Value(Object)
-                                                , (.:)
-                                                , eitherDecode
-                                                )
-import           GHC.Generics                   ( Generic )
+import           Control.Monad                   (mzero)
+import           Data.Aeson                      (FromJSON, Value (Object),
+                                                  eitherDecode, parseJSON, (.:))
+import           Data.ByteString.Lazy            (ByteString, readFile)
+import           Data.Map.Strict                 (Map)
+import           Data.String                     (IsString)
+import           Data.Text                       (Text)
+import           GHC.Generics                    (Generic)
+import           NixManager.Constants            (appName)
+import           NixManager.NixExpr              (NixExpr)
+import           NixManager.NixLocation          (NixLocation (NixLocation))
+import           NixManager.NixServiceOptionType (NixServiceOptionType,
+                                                  parseNixServiceOptionType)
+import           NixManager.Util                 (TextualError, addToError,
+                                                  fromStringEither)
+import           Prelude                         hiding (readFile)
+import           System.Directory                (XdgDirectory (XdgCache),
+                                                  doesFileExist,
+                                                  getXdgDirectory)
+import           System.FilePath                 ((</>))
 
 -- | Service option, as read from the @options.json@ file
 data NixServiceOption = NixServiceOption {
     optionDescription :: Text -- ^ The option description
-  , optionLoc :: NixLocation -- ^ The option location
-  , optionType :: TextualError NixServiceOptionType -- ^ The type, possibly parsed
-  , optionValue :: Maybe NixExpr -- ^ The option value, if present
+  , optionLoc         :: NixLocation -- ^ The option location
+  , optionType        :: TextualError NixServiceOptionType -- ^ The type, possibly parsed
+  , optionValue       :: Maybe NixExpr -- ^ The option value, if present
   } deriving(Show, Generic)
 
 instance FromJSON NixServiceOption where

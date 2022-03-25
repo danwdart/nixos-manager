@@ -1,8 +1,8 @@
-{-# LANGUAGE OverloadedLabels #-}
-{-# LANGUAGE RankNTypes #-}
-{-# LANGUAGE FlexibleContexts #-}
-{-# LANGUAGE OverloadedLists #-}
+{-# LANGUAGE FlexibleContexts  #-}
+{-# LANGUAGE OverloadedLabels  #-}
+{-# LANGUAGE OverloadedLists   #-}
 {-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE RankNTypes        #-}
 {-|
   Description: Contains the actual GUI (widgets) for the services tab
 Contains the actual GUI (widgets) for the services tab
@@ -13,43 +13,24 @@ module NixManager.Services.View
   )
 where
 
-import           NixManager.View.ServiceEditView
-                                                ( editView )
-import           NixManager.View.InformationBox ( informationBox )
-import           NixManager.View.ImageButton    ( imageButton )
-import qualified NixManager.View.IconName      as IconName
-import           Data.Default                   ( def )
-import           NixManager.View.GtkUtil        ( expandAndFill )
-import           NixManager.View.ProgressBar    ( progressBar )
-import           Data.Text                      ( Text )
-import           GI.Gtk.Declarative             ( bin
-                                                , on
-                                                , BoxChild(BoxChild)
-                                                , defaultBoxChildProperties
-                                                , widget
-                                                , Attribute((:=))
-                                                , container
-                                                )
-import qualified GI.Gtk                        as Gtk
-import           Control.Lens                   ( (^.) )
-import           NixManager.Services.Event      ( Event
-                                                  ( EventEditView
-                                                  , EventDownloadStart
-                                                  , EventStateReload
-                                                  , EventDownloadCancel
-                                                  )
-                                                )
-import           NixManager.Services.State      ( State
-                                                  ( StateInvalidOptions
-                                                  , StateInvalidExpr
-                                                  , StateDone
-                                                  , StateDownloading
-                                                  )
-                                                )
-import           NixManager.ManagerEvent        ( ManagerEvent
-                                                  ( ManagerEventServices
-                                                  )
-                                                )
+import           Control.Lens                    ((^.))
+import           Data.Default                    (def)
+import           Data.Text                       (Text)
+import qualified GI.Gtk                          as Gtk
+import           GI.Gtk.Declarative              (Attribute ((:=)),
+                                                  BoxChild (BoxChild), bin,
+                                                  container,
+                                                  defaultBoxChildProperties, on,
+                                                  widget)
+import           NixManager.ManagerEvent         (ManagerEvent (ManagerEventServices))
+import           NixManager.Services.Event       (Event (EventDownloadCancel, EventDownloadStart, EventEditView, EventStateReload))
+import           NixManager.Services.State       (State (StateDone, StateDownloading, StateInvalidExpr, StateInvalidOptions))
+import           NixManager.View.GtkUtil         (expandAndFill)
+import qualified NixManager.View.IconName        as IconName
+import           NixManager.View.ImageButton     (imageButton)
+import           NixManager.View.InformationBox  (informationBox)
+import           NixManager.View.ProgressBar     (progressBar)
+import           NixManager.View.ServiceEditView (editView)
 
 --servicesBox :: ManagerState -> Widget ManagerEvent
 -- This extra container is there to circumvent a bug that switches to the next page when one page is replaced.

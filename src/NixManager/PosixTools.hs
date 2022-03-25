@@ -12,16 +12,12 @@ module NixManager.PosixTools
   )
 where
 
-import           System.Process                 ( Pid )
-import           Data.Foldable                  ( toList )
-import           NixManager.Util                ( mwhen
-                                                , showText
-                                                )
-import           NixManager.Bash                ( Expr(Command)
-                                                , Arg(LiteralArg, RawArg)
-                                                )
-import           Data.Text                      ( pack )
-import           Data.List.NonEmpty             ( NonEmpty )
+import           Data.Foldable      (toList)
+import           Data.List.NonEmpty (NonEmpty)
+import           Data.Text          (pack)
+import           NixManager.Bash    (Arg (LiteralArg, RawArg), Expr (Command))
+import           NixManager.Util    (mwhen, showText)
+import           System.Process     (Pid)
 
 -- | Wrapper for @mkdir@ (first parameter specifies recursion)
 mkdir :: Bool -> NonEmpty FilePath -> Expr

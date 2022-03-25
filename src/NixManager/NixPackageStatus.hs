@@ -8,7 +8,7 @@ module NixManager.NixPackageStatus
   )
 where
 
-import           GHC.Generics                   ( Generic )
+import           GHC.Generics (Generic)
 
 -- | Enum containing a package’s status
 data NixPackageStatus = NixPackageNothing -- ^ Package is not installed and not pending for installation/deinstallation

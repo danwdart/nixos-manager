@@ -1,5 +1,5 @@
 {-# LANGUAGE DeriveGeneric #-}
-{-# LANGUAGE RankNTypes #-}
+{-# LANGUAGE RankNTypes    #-}
 {-|
   Description: The "root" event type, to be used with the gi-gtk-declarative-app-simple model. The different tabs (notebook pages) use their own events, which are also manager events.
   -}
@@ -16,27 +16,24 @@ module NixManager.ManagerEvent
   )
 where
 
-import           Control.Lens                   ( (^.)
-                                                , Lens'
-                                                , set
-                                                )
-import           NixManager.Services.Event     as Services
-import qualified NixManager.Packages.Event     as Packages
+import           Control.Lens                  (Lens', set, (^.))
+import           GHC.Generics                  (Generic)
+import           GI.Gtk.Declarative.App.Simple (Transition (Exit, Transition))
 import qualified NixManager.Admin.Event        as Admin
 import qualified NixManager.HMAdmin.Event      as HMAdmin
 import qualified NixManager.HMPackages.Event   as HMPackages
 import qualified NixManager.HMServices.Event   as HMServices
-import           GI.Gtk.Declarative.App.Simple  ( Transition(Transition, Exit) )
-import           GHC.Generics                   ( Generic )
+import qualified NixManager.Packages.Event     as Packages
+import           NixManager.Services.Event     as Services
 
 -- | The root event type
 data ManagerEvent = ManagerEventClosed -- ^ Used only for closing the application
                   | ManagerEventDiscard -- ^ Used in situations where we /must/ return an event but don't want to actually do something in response (to other peoeple: can this be removed somehow?)
                   | ManagerEventAdmin Admin.Event -- ^ Specific event for the "Admin" tab (the first one)
                   | ManagerEventServices Services.Event -- ^ Specific event for the "Services" tab (the third one)
-                  | ManagerEventPackages Packages.Event -- ^ Specific event for the "Packages" tab (the second one) 
-                  | ManagerEventHMServices HMServices.Event -- ^ Specific event for the "Home Manager Services" tab 
-                  | ManagerEventHMAdmin HMAdmin.Event -- ^ Specific event for the "Home Manager Services" tab 
+                  | ManagerEventPackages Packages.Event -- ^ Specific event for the "Packages" tab (the second one)
+                  | ManagerEventHMServices HMServices.Event -- ^ Specific event for the "Home Manager Services" tab
+                  | ManagerEventHMAdmin HMAdmin.Event -- ^ Specific event for the "Home Manager Services" tab
                   | ManagerEventHMPackages HMPackages.Event -- ^ Specific event for the "Home Manager Packages" tab
                   deriving(Generic)
 
@@ -64,7 +61,7 @@ packagesEvent = Just . ManagerEventPackages
 hmServicesEvent :: HMServices.Event -> Maybe ManagerEvent
 hmServicesEvent = Just . ManagerEventHMServices
 
--- | A special transition that doesn't have side-effects or emit an event. 
+-- | A special transition that doesn't have side-effects or emit an event.
 pureTransition :: state -> Transition state ManagerEvent
 pureTransition x = Transition x (pure Nothing)
 

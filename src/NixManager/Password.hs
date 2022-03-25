@@ -7,7 +7,7 @@ module NixManager.Password
   )
 where
 
-import           Data.Text                      ( Text )
+import           Data.Text (Text)
 
 -- | Wrapper for passwords (used for the @sudo@ prompt stuff)
 newtype Password = Password {

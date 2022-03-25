@@ -4,63 +4,34 @@ Description: Random utilities for NixOS Manager
 As a general rule, stuff defined here should not import anything from the manager itself.
 -}
 {-# LANGUAGE OverloadedStrings #-}
-{-# LANGUAGE RankNTypes #-}
+{-# LANGUAGE RankNTypes        #-}
 module NixManager.Util where
 
-import           Data.Composition               ( (.:.) )
-import           Text.Megaparsec                ( errorBundlePretty
-                                                , parse
-                                                , Parsec
-                                                , Stream
-                                                , ShowErrorComponent
-                                                , TraversableStream
-                                                , VisualStream
-                                                )
-import           Data.Char                      ( isUpper
-                                                , toLower
-                                                )
-import           Data.ByteString                ( ByteString )
-import qualified Data.ByteString.Lazy          as BSL
-import           Control.Exception              ( Exception )
-import           Control.Concurrent             ( threadDelay )
-import           Data.String                    ( IsString )
-import           Data.Bifunctor                 ( first )
-import qualified Data.Text.Lazy                as TL
-import           System.Directory               ( doesFileExist )
-import qualified Data.Text.Lazy.Encoding       as TLE
-import           Data.Text                      ( Text
-                                                , pack
-                                                , drop
-                                                , length
-                                                , replace
-                                                , singleton
-                                                , snoc
-                                                , null
-                                                , foldl
-                                                )
-import           Data.List                      ( unfoldr )
-import           Prelude                 hiding ( putStrLn
-                                                , foldl
-                                                , null
-                                                , drop
-                                                , length
-                                                )
-import           Control.Lens                   ( Getter
-                                                , Lens'
-                                                , elementOf
-                                                , Traversal'
-                                                , Iso'
-                                                , iso
-                                                , (^.)
-                                                , to
-                                                )
-import qualified Data.Text.Encoding            as Encoding
-import           Data.Validation                ( Validation(Failure)
-                                                , fromEither
-                                                , liftError
-                                                , validation
-                                                )
-import           Data.Foldable                  ( find )
+import           Control.Concurrent      (threadDelay)
+import           Control.Exception       (Exception)
+import           Control.Lens            (Getter, Iso', Lens', Traversal',
+                                          elementOf, iso, to, (^.))
+import           Data.Bifunctor          (first)
+import           Data.ByteString         (ByteString)
+import qualified Data.ByteString.Lazy    as BSL
+import           Data.Char               (isUpper, toLower)
+import           Data.Composition        ((.:.))
+import           Data.Foldable           (find)
+import           Data.List               (unfoldr)
+import           Data.String             (IsString)
+import           Data.Text               (Text, drop, foldl, length, null, pack,
+                                          replace, singleton, snoc)
+import qualified Data.Text.Encoding      as Encoding
+import qualified Data.Text.Lazy          as TL
+import qualified Data.Text.Lazy.Encoding as TLE
+import           Data.Validation         (Validation (Failure), fromEither,
+                                          liftError, validation)
+import           Prelude                 hiding (drop, foldl, length, null,
+                                          putStrLn)
+import           System.Directory        (doesFileExist)
+import           Text.Megaparsec         (Parsec, ShowErrorComponent, Stream,
+                                          TraversableStream, VisualStream,
+                                          errorBundlePretty, parse)
 
 -- | Since we’re working with 'Text' as much as possible, we’re using a text based error type instead of the customary 'Either String'
 type TextualError = Validation Text

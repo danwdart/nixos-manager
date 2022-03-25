@@ -2,88 +2,45 @@
   Description: Contains the update logic for the home-manager Administration tab
 Contains the update logic for the home-manager Administration tab
   -}
-{-# LANGUAGE OverloadedLabels #-}
-{-# LANGUAGE FlexibleContexts #-}
+{-# LANGUAGE BlockArguments    #-}
+{-# LANGUAGE FlexibleContexts  #-}
+{-# LANGUAGE OverloadedLabels  #-}
 {-# LANGUAGE OverloadedStrings #-}
-{-# LANGUAGE BlockArguments #-}
 
 module NixManager.HMAdmin.Update
   ( updateEvent
   )
 where
 
-import           Data.Foldable                  ( for_ )
-import qualified Data.ByteString.Char8         as BS
-import qualified NixManager.HMPackages.Event   as HMPackagesEvent
-import           NixManager.ManagerEvent        ( hmAdminEvent
-                                                , ManagerEvent
-                                                  ( ManagerEventHMAdmin
-                                                  )
-                                                , liftUpdate
-                                                , pureTransition
-                                                , hmPackagesEvent
-                                                )
-import           System.Exit                    ( ExitCode
-                                                  ( ExitSuccess
-                                                  , ExitFailure
-                                                  )
-                                                )
-import           NixManager.Process             ( updateProcess
-                                                , terminate
-                                                )
-import           NixManager.ChangeType          ( ChangeType(Changes, NoChanges)
-                                                )
-import qualified NixManager.HMAdmin.GenerationsView
-                                               as GenerationsView
-import           NixManager.HMAdmin.State       ( rebuildData
-                                                , determineChanges
-                                                , generationsState
-                                                , garbageData
-                                                , changes
-                                                )
-import           NixManager.HMAdmin.GarbageData ( GarbageData )
-import           Data.Monoid                    ( getFirst )
-import           Control.Lens                   ( (^.)
-                                                , from
-                                                , traversed
-                                                , (<>~)
-                                                , (&)
-                                                , (?~)
-                                                , to
-                                                , (^?)
-                                                , folded
-                                                , (.~)
-                                                , (+~)
-                                                )
-import           NixManager.HMAdmin.Event       ( Event
-                                                  ( EventRebuild
-                                                  , EventRebuildStarted
-                                                  , EventGarbage
-                                                  , EventGarbageCancel
-                                                  , EventGarbageWatch
-                                                  , EventGenerations
-                                                  , EventReload
-                                                  , EventReloadFinished
-                                                  , EventGarbageFinished
-                                                  , EventRebuildWatch
-                                                  , EventRebuildCancel
-                                                  , EventRebuildChangeDetails
-                                                  , EventGarbageChangeDetails
-                                                  , EventRebuildFinished
-                                                  , EventGarbageStarted
-                                                  , EventRebuildModeIdxChanged
-                                                  )
-                                                )
-import           NixManager.ManagerState        ( ManagerState(..) )
-import           NixManager.Util                ( threadDelayMillis )
-import           NixManager.HMRebuild           ( rebuild )
-import           GI.Gtk.Declarative.App.Simple  ( Transition(Transition) )
-import           Prelude                 hiding ( length
-                                                , putStrLn
-                                                )
-import           NixManager.HMAdmin.BuildState  ( BuildState(BuildState) )
-import           NixManager.HMRebuildMode       ( rebuildModeIdx )
-import           NixManager.HMGarbage           ( collectGarbage )
+import           Control.Lens                       (folded, from, to,
+                                                     traversed, (&), (+~), (.~),
+                                                     (<>~), (?~), (^.), (^?))
+import qualified Data.ByteString.Char8              as BS
+import           Data.Foldable                      (for_)
+import           Data.Monoid                        (getFirst)
+import           GI.Gtk.Declarative.App.Simple      (Transition (Transition))
+import           NixManager.ChangeType              (ChangeType (Changes, NoChanges))
+import           NixManager.HMAdmin.BuildState      (BuildState (BuildState))
+import           NixManager.HMAdmin.Event           (Event (EventGarbage, EventGarbageCancel, EventGarbageChangeDetails, EventGarbageFinished, EventGarbageStarted, EventGarbageWatch, EventGenerations, EventRebuild, EventRebuildCancel, EventRebuildChangeDetails, EventRebuildFinished, EventRebuildModeIdxChanged, EventRebuildStarted, EventRebuildWatch, EventReload, EventReloadFinished))
+import           NixManager.HMAdmin.GarbageData     (GarbageData)
+import qualified NixManager.HMAdmin.GenerationsView as GenerationsView
+import           NixManager.HMAdmin.State           (changes, determineChanges,
+                                                     garbageData,
+                                                     generationsState,
+                                                     rebuildData)
+import           NixManager.HMGarbage               (collectGarbage)
+import qualified NixManager.HMPackages.Event        as HMPackagesEvent
+import           NixManager.HMRebuild               (rebuild)
+import           NixManager.HMRebuildMode           (rebuildModeIdx)
+import           NixManager.ManagerEvent            (ManagerEvent (ManagerEventHMAdmin),
+                                                     hmAdminEvent,
+                                                     hmPackagesEvent,
+                                                     liftUpdate, pureTransition)
+import           NixManager.ManagerState            (ManagerState (..))
+import           NixManager.Process                 (terminate, updateProcess)
+import           NixManager.Util                    (threadDelayMillis)
+import           Prelude                            hiding (length, putStrLn)
+import           System.Exit                        (ExitCode (ExitFailure, ExitSuccess))
 
 -- | Format a process exit code somewhat nicer than the default 'Show' instance
 formatExitCode :: ExitCode -> BS.ByteString

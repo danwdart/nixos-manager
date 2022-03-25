@@ -8,14 +8,11 @@ module NixManager.HMAdmin.Event
   )
 where
 
-import           NixManager.ChangeType          ( ChangeType )
-import           NixManager.Process             ( ProcessData
-                                                , ProcessOutput
-                                                )
-import           NixManager.View.DetailsState   ( DetailsState )
-import           System.Exit                    ( ExitCode )
-import qualified NixManager.HMAdmin.GenerationsView
-                                               as GenerationsView
+import           NixManager.ChangeType              (ChangeType)
+import qualified NixManager.HMAdmin.GenerationsView as GenerationsView
+import           NixManager.Process                 (ProcessData, ProcessOutput)
+import           NixManager.View.DetailsState       (DetailsState)
+import           System.Exit                        (ExitCode)
 
 data Event = EventRebuild -- ^ Triggered by the Rebuild button. Starts the home-manager rebuild process.
            | EventRebuildStarted ProcessData -- ^ Is emitted after the rebuild has started and initiates the “watchdog” event.

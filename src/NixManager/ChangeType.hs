@@ -7,7 +7,7 @@ module NixManager.ChangeType
   )
 where
 
-import           GHC.Generics                   ( Generic )
+import           GHC.Generics (Generic)
 
 -- | Avoid boolean blindness by using this enum instead.
 data ChangeType = NoChanges -- ^ No changes to apply

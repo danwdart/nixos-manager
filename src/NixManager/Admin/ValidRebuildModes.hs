@@ -11,18 +11,11 @@ module NixManager.Admin.ValidRebuildModes
   )
 where
 
-import           Data.Maybe                     ( fromJust )
-import           Control.Lens                   ( Iso'
-                                                , iso
-                                                )
-import           Data.List                      ( elemIndex )
-import           NixManager.NixRebuildMode      ( NixRebuildMode
-                                                  ( NixRebuildSwitch
-                                                  , NixRebuildDryBuild
-                                                  , NixRebuildDryActivate
-                                                  )
-                                                )
-import           Data.Text                      ( Text )
+import           Control.Lens              (Iso', iso)
+import           Data.List                 (elemIndex)
+import           Data.Maybe                (fromJust)
+import           Data.Text                 (Text)
+import           NixManager.NixRebuildMode (NixRebuildMode (NixRebuildDryActivate, NixRebuildDryBuild, NixRebuildSwitch))
 
 -- | Get a nice description for a given rebuild mode (if it’s a “valid” one)
 descriptionForValidRebuildMode :: NixRebuildMode -> Maybe Text

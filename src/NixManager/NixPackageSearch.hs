@@ -2,39 +2,23 @@
   Description: Functions that wrap @nix search@
 Functions that wrap @nix search@
   -}
+{-# LANGUAGE OverloadedLabels  #-}
 {-# LANGUAGE OverloadedStrings #-}
-{-# LANGUAGE OverloadedLabels #-}
 module NixManager.NixPackageSearch
   ( searchPackages
   )
 where
 
-import           Data.Validation                ( Validation(Failure) )
-import           Data.Text                      ( Text )
-import           NixManager.Bash                ( Expr(Command)
-                                                , Arg(LiteralArg)
-                                                )
-import           System.Exit                    ( ExitCode
-                                                  ( ExitSuccess
-                                                  , ExitFailure
-                                                  )
-                                                )
-import           NixManager.Process             ( runProcessToFinish )
-import           NixManager.Util                ( decodeUtf8
-                                                , TextualError
-                                                , fromStrictBS
-                                                , addToError
-                                                , showText
-                                                )
-import           Control.Lens                   ( (^?!)
-                                                , (^.)
-                                                , to
-                                                , folded
-                                                )
-import           NixManager.NixPackage          ( NixPackage
-                                                , readPackagesJson
-                                                )
-import           Data.Monoid                    ( First(getFirst) )
+import           Control.Lens          (folded, to, (^.), (^?!))
+import           Data.Monoid           (First (getFirst))
+import           Data.Text             (Text)
+import           Data.Validation       (Validation (Failure))
+import           NixManager.Bash       (Arg (LiteralArg), Expr (Command))
+import           NixManager.NixPackage (NixPackage, readPackagesJson)
+import           NixManager.Process    (runProcessToFinish)
+import           NixManager.Util       (TextualError, addToError, decodeUtf8,
+                                        fromStrictBS, showText)
+import           System.Exit           (ExitCode (ExitFailure, ExitSuccess))
 
 -- | Expression to call @nix search --json <search-term>@
 nixSearchExpr :: Text -> Expr

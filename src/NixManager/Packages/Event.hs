@@ -7,10 +7,9 @@ module NixManager.Packages.Event
   )
 where
 
-import           NixManager.NixPackage          ( NixPackage )
-import           NixManager.Message             ( Message )
-import qualified NixManager.View.PackageEditView
-                                               as PackageEditView
+import           NixManager.Message              (Message)
+import           NixManager.NixPackage           (NixPackage)
+import qualified NixManager.View.PackageEditView as PackageEditView
 
 data Event = EventPackageEditView PackageEditView.Event -- ^ Triggered whenever the search entry changes
            | EventInstallCompleted [NixPackage] PackageEditView.InstallationType -- ^ Triggered when the installation of a package is successful. We pass the new package cache here so we can immediately update the state with it.

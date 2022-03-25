@@ -3,45 +3,28 @@
 
 An error dialog which is displayed in case initialization fails
  -}
-{-# LANGUAGE OverloadedLabels #-}
-{-# LANGUAGE FlexibleContexts #-}
-{-# LANGUAGE OverloadedLists #-}
+{-# LANGUAGE FlexibleContexts  #-}
+{-# LANGUAGE OverloadedLabels  #-}
+{-# LANGUAGE OverloadedLists   #-}
 {-# LANGUAGE OverloadedStrings #-}
 module NixManager.View.ErrorDialog
   ( runErrorDialog
   )
 where
 
-import           Text.Wrap                      ( wrapText
-                                                , WrapSettings(WrapSettings)
-                                                )
-import           Data.Text                      ( Text )
-import           Control.Monad                  ( void )
-import           NixManager.View.GtkUtil        ( paddedAround
-                                                , expandAndFill
-                                                )
-import           GI.Gtk.Declarative.App.Simple  ( App(App)
-                                                , view
-                                                , update
-                                                , AppView
-                                                , Transition(Exit)
-                                                , inputs
-                                                , initialState
-                                                , run
-                                                )
-import           GI.Gtk.Declarative             ( bin
-                                                , on
-                                                , expand
-                                                , container
-                                                , fill
-                                                , widget
-                                                , Attribute((:=))
-                                                , classes
-                                                , container
-                                                , BoxChild(BoxChild)
-                                                , on
-                                                )
+import           Control.Monad                 (void)
+import           Data.Text                     (Text)
 import qualified GI.Gtk                        as Gtk
+import           GI.Gtk.Declarative            (Attribute ((:=)),
+                                                BoxChild (BoxChild), bin,
+                                                classes, container, expand,
+                                                fill, on, widget)
+import           GI.Gtk.Declarative.App.Simple (App (App), AppView,
+                                                Transition (Exit), initialState,
+                                                inputs, run, update, view)
+import           NixManager.View.GtkUtil       (expandAndFill, paddedAround)
+import           Text.Wrap                     (WrapSettings (WrapSettings),
+                                                wrapText)
 
 -- | There’s just one event, to exit the dialog
 data Event = ExitEvent

@@ -1,6 +1,6 @@
-{-# LANGUAGE OverloadedLabels #-}
-{-# LANGUAGE FlexibleContexts #-}
-{-# LANGUAGE OverloadedLists #-}
+{-# LANGUAGE FlexibleContexts  #-}
+{-# LANGUAGE OverloadedLabels  #-}
+{-# LANGUAGE OverloadedLists   #-}
 {-# LANGUAGE OverloadedStrings #-}
 {-|
   Description: The root of the view hierarchy
@@ -12,36 +12,26 @@ module NixManager.View.Root
   )
 where
 
-import           NixManager.ProgramArguments    ( ProgramArguments )
-import qualified NixManager.Packages.View      as PackagesView
-import qualified NixManager.Services.View      as ServicesView
-import qualified NixManager.Admin.View         as AdminView
-import qualified NixManager.HMServices.View    as HMServicesView
-import qualified NixManager.HMPackages.View    as HMPackagesView
-import qualified NixManager.HMAdmin.View       as HMAdminView
-import           GI.Gtk.Declarative             ( Attribute((:=))
-                                                , on
-                                                , bin
-                                                , notebook
-                                                , container
-                                                , pageWithTab
-                                                , BoxChild(BoxChild)
-                                                , widget
-                                                )
-import           Data.Default                   ( def )
-import           NixManager.View.Icon           ( icon
-                                                , IconProps(IconProps)
-                                                )
-import qualified NixManager.View.IconName      as IconName
-import           GI.Gtk.Declarative.App.Simple  ( AppView )
+import           Control.Lens                  ((^.))
+import           Data.Default                  (def)
+import           Data.Vector                   (Vector)
 import qualified GI.Gtk                        as Gtk
-import           NixManager.ManagerState        ( ManagerState )
-import           NixManager.ManagerEvent        ( ManagerEvent
-                                                  ( ManagerEventClosed
-                                                  )
-                                                )
-import           Data.Vector                    ( Vector )
-import           Control.Lens                   ( (^.) )
+import           GI.Gtk.Declarative            (Attribute ((:=)),
+                                                BoxChild (BoxChild), bin,
+                                                container, notebook, on,
+                                                pageWithTab, widget)
+import           GI.Gtk.Declarative.App.Simple (AppView)
+import qualified NixManager.Admin.View         as AdminView
+import qualified NixManager.HMAdmin.View       as HMAdminView
+import qualified NixManager.HMPackages.View    as HMPackagesView
+import qualified NixManager.HMServices.View    as HMServicesView
+import           NixManager.ManagerEvent       (ManagerEvent (ManagerEventClosed))
+import           NixManager.ManagerState       (ManagerState)
+import qualified NixManager.Packages.View      as PackagesView
+import           NixManager.ProgramArguments   (ProgramArguments)
+import qualified NixManager.Services.View      as ServicesView
+import           NixManager.View.Icon          (IconProps (IconProps), icon)
+import qualified NixManager.View.IconName      as IconName
 
 -- | The main window’s attributes
 windowAttributes :: Vector (Attribute Gtk.Window ManagerEvent)

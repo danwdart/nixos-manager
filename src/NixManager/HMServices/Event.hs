@@ -3,9 +3,8 @@ module NixManager.HMServices.Event
   )
 where
 
-import           NixManager.HMServices.State    ( State )
-import           NixManager.View.ServiceEditView
-                                                ( EditViewEvent )
+import           NixManager.HMServices.State     (State)
+import           NixManager.View.ServiceEditView (EditViewEvent)
 
 data Event = EventReload
            | EventReloaded State

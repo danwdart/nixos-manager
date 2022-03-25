@@ -2,26 +2,22 @@
   Description: Metadata for a Nix package. This is a companion module to "NixManager.NixPackage"
 Metadata for a Nix package. This is a companion module to "NixManager.NixPackage"
   -}
+{-# LANGUAGE DeriveGeneric     #-}
 {-# LANGUAGE OverloadedStrings #-}
-{-# LANGUAGE DeriveGeneric #-}
 module NixManager.NixPackageMeta
   ( NixPackageMeta(NixPackageMeta)
   )
 where
 
-import           Control.Monad                  ( mzero )
-import           Data.Text                      ( Text )
-import           Data.Aeson                     ( FromJSON
-                                                , Value(Object)
-                                                , parseJSON
-                                                , (.:)
-                                                )
-import           GHC.Generics                   ( Generic )
+import           Control.Monad (mzero)
+import           Data.Aeson    (FromJSON, Value (Object), parseJSON, (.:))
+import           Data.Text     (Text)
+import           GHC.Generics  (Generic)
 
 -- | Metadata for a Nix package. This is a companion module to "NixManager.NixPackage"
 data NixPackageMeta = NixPackageMeta {
-    name :: Text -- ^ Package name
-  , version :: Text -- ^ Package version
+    name        :: Text -- ^ Package name
+  , version     :: Text -- ^ Package version
   , description :: Text -- ^ Package description
   } deriving(Eq,Show, Generic)
 

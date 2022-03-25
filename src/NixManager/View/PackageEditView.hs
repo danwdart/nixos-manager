@@ -2,14 +2,14 @@
   Description: Contains the actual GUI (widgets) for the package edit tabs
 Contains the actual GUI (widgets) for the package edit tabs
   -}
-{-# LANGUAGE OverloadedLabels #-}
-{-# LANGUAGE DeriveGeneric #-}
+{-# LANGUAGE BlockArguments        #-}
+{-# LANGUAGE DeriveGeneric         #-}
 {-# LANGUAGE DuplicateRecordFields #-}
-{-# LANGUAGE BlockArguments #-}
-{-# LANGUAGE FlexibleContexts #-}
-{-# LANGUAGE OverloadedLists #-}
-{-# LANGUAGE LambdaCase #-}
-{-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE FlexibleContexts      #-}
+{-# LANGUAGE LambdaCase            #-}
+{-# LANGUAGE OverloadedLabels      #-}
+{-# LANGUAGE OverloadedLists       #-}
+{-# LANGUAGE OverloadedStrings     #-}
 module NixManager.View.PackageEditView
   ( updateEvent
   , packagesBox
@@ -24,121 +24,61 @@ module NixManager.View.PackageEditView
   )
 where
 
-import           GHC.Generics                   ( Generic )
-import           Data.Monoid                    ( getFirst )
-import           NixManager.Message             ( errorMessage
-                                                , infoMessage
-                                                , messageWidget
-                                                , Message
-                                                )
-import           System.Exit                    ( ExitCode
-                                                  ( ExitSuccess
-                                                  , ExitFailure
-                                                  )
-                                                )
-import           NixManager.NixPackagesUtil     ( dryInstall
-                                                , executablesFromStorePath
-                                                , startProgram
-                                                )
-import           GI.Gtk.Declarative.App.Simple  ( Transition(Transition) )
-import           NixManager.Process             ( updateProcess
-                                                , ProcessData
-                                                , ProcessOutput
-                                                )
-import           NixManager.NixLocation         ( flattenedTail )
-import           NixManager.PackageCategory     ( packageCategories
-                                                , categoryToText
-                                                , PackageCategory
-                                                  ( PackageCategoryAll
-                                                  , PackageCategoryInstalled
-                                                  , PackageCategoryPendingInstall
-                                                  , PackageCategoryPendingUninstall
-                                                  )
-                                                )
-import qualified NixManager.PackageCategory    as PC
-import           NixManager.View.ComboBox       ( comboBox
-                                                , ComboBoxProperties
-                                                  ( ComboBoxProperties
-                                                  )
-                                                , ComboBoxChangeEvent
-                                                  ( ComboBoxChangeEvent
-                                                  )
-                                                )
-import           NixManager.View.ProgressBar    ( progressBar )
-import qualified NixManager.View.IconName      as IconName
-import           NixManager.NixPackageStatus    ( NixPackageStatus
-                                                  ( NixPackageNothing
-                                                  , NixPackageInstalled
-                                                  , NixPackagePendingInstall
-                                                  , NixPackagePendingUninstall
-                                                  )
-                                                )
-import           NixManager.NixPackage          ( NixPackage )
-import           Prelude                 hiding ( length
-                                                , null
-                                                , unlines
-                                                , init
-                                                , putStrLn
-                                                )
-import           Data.Text                      ( length
-                                                , Text
-                                                , toLower
-                                                , isInfixOf
-                                                , init
-                                                , unlines
-                                                , null
-                                                )
-import           Data.Text.IO                   ( putStrLn )
-import           GI.Gtk.Declarative.Container.Class
-                                                ( Children )
-import           Data.Default                   ( def )
-import           GI.Gtk.Declarative             ( bin
-                                                , Widget
-                                                , padding
-                                                , Container
-                                                , FromWidget
-                                                , Bin
-                                                , widget
-                                                , Attribute((:=))
-                                                , classes
-                                                , container
-                                                , BoxChild(BoxChild)
-                                                , on
-                                                , onM
-                                                )
-import qualified Data.Vector                   as Vector
-import qualified GI.Gtk                        as Gtk
-import           Data.GI.Base.Overloading       ( IsDescendantOf )
-import           System.FilePath                ( (</>) )
-import           Control.Lens                   ( (^.)
-                                                , Lens'
-                                                , Traversal'
-                                                , (^?)
-                                                , (?~)
-                                                , (+~)
-                                                , (^?!)
-                                                , traversed
-                                                , (.~)
-                                                , filtered
-                                                , (&)
-                                                , (^..)
-                                                , from
-                                                , to
-                                                , has
-                                                , folded
-                                                )
-import           NixManager.Util                ( replaceHtmlEntities
-                                                , indirectIndexTraversal
-                                                , threadDelayMillis
-                                                , decodeUtf8
-                                                , showText
-                                                , surroundSimple
-                                                )
-import           NixManager.View.GtkUtil        ( paddedAround
-                                                , expandAndFill
-                                                )
-import           NixManager.View.ImageButton    ( imageButton )
-import           Control.Monad.IO.Class         ( MonadIO )
+import           Control.Lens                       (Lens', Traversal',
+                                                     filtered, folded, from,
+                                                     has, to, traversed, (&),
+                                                     (+~), (.~), (?~), (^.),
+                                                     (^..), (^?!), (^?))
+import           Control.Monad.IO.Class             (MonadIO)
+import           Data.Default                       (def)
+import           Data.GI.Base.Overloading           (IsDescendantOf)
+import           Data.Monoid                        (getFirst)
+import           Data.Text                          (Text, init, isInfixOf,
+                                                     length, null, toLower,
+                                                     unlines)
+import           Data.Text.IO                       (putStrLn)
+import qualified Data.Vector                        as Vector
+import           GHC.Generics                       (Generic)
+import qualified GI.Gtk                             as Gtk
+import           GI.Gtk.Declarative                 (Attribute ((:=)), Bin,
+                                                     BoxChild (BoxChild),
+                                                     Container, FromWidget,
+                                                     Widget, bin, classes,
+                                                     container, on, onM,
+                                                     padding, widget)
+import           GI.Gtk.Declarative.App.Simple      (Transition (Transition))
+import           GI.Gtk.Declarative.Container.Class (Children)
+import           NixManager.Message                 (Message, errorMessage,
+                                                     infoMessage, messageWidget)
+import           NixManager.NixLocation             (flattenedTail)
+import           NixManager.NixPackage              (NixPackage)
+import           NixManager.NixPackageStatus        (NixPackageStatus (NixPackageInstalled, NixPackageNothing, NixPackagePendingInstall, NixPackagePendingUninstall))
+import           NixManager.NixPackagesUtil         (dryInstall,
+                                                     executablesFromStorePath,
+                                                     startProgram)
+import           NixManager.PackageCategory         (PackageCategory (PackageCategoryAll, PackageCategoryInstalled, PackageCategoryPendingInstall, PackageCategoryPendingUninstall),
+                                                     categoryToText,
+                                                     packageCategories)
+import qualified NixManager.PackageCategory         as PC
+import           NixManager.Process                 (ProcessData, ProcessOutput,
+                                                     updateProcess)
+import           NixManager.Util                    (decodeUtf8,
+                                                     indirectIndexTraversal,
+                                                     replaceHtmlEntities,
+                                                     showText, surroundSimple,
+                                                     threadDelayMillis)
+import           NixManager.View.ComboBox           (ComboBoxChangeEvent (ComboBoxChangeEvent),
+                                                     ComboBoxProperties (ComboBoxProperties),
+                                                     comboBox)
+import           NixManager.View.GtkUtil            (expandAndFill,
+                                                     paddedAround)
+import qualified NixManager.View.IconName           as IconName
+import           NixManager.View.ImageButton        (imageButton)
+import           NixManager.View.ProgressBar        (progressBar)
+import           Prelude                            hiding (init, length, null,
+                                                     putStrLn, unlines)
+import           System.Exit                        (ExitCode (ExitFailure, ExitSuccess))
+import           System.FilePath                    ((</>))
 
 
 -- | (Boolean) enum signifying if, after we made some change to the packages (say we marked a package for installation), it’s time to re-evaluate if we have changes to apply. If we mark a package for installation, we, of course, have changes to apply. A case for the opposite is marking a package for installation and immediately unmarking it again.
@@ -162,18 +102,18 @@ data Event = EventSearchChanged Text -- ^ Triggered whenever the search entry ch
 
 -- | This is only used when the “Try install” operation is in progress and cumulates all the state pertaining to that
 data InstallingState = InstallingState {
-    package :: NixPackage -- ^ Which package is being try-installed
-  , counter :: Int  -- ^ This field is necessary to “pulse” the GTK progress bar while installing, see "NixManager.View.ProgressBar" for details
+    package     :: NixPackage -- ^ Which package is being try-installed
+  , counter     :: Int  -- ^ This field is necessary to “pulse” the GTK progress bar while installing, see "NixManager.View.ProgressBar" for details
   , processData :: ProcessData -- ^ The process data
   } deriving(Generic)
 
 data State = State {
-    packageCache :: [NixPackage] -- ^ Cache of all available Nix packages
-  , searchString :: Text -- ^ Current search string
-  , selectedIdx :: Maybe Int -- ^ Currently selected index
+    packageCache      :: [NixPackage] -- ^ Cache of all available Nix packages
+  , searchString      :: Text -- ^ Current search string
+  , selectedIdx       :: Maybe Int -- ^ Currently selected index
   , installingPackage :: Maybe InstallingState -- ^ Only set if “Try install” is in progress
-  , latestMessage :: Maybe Message -- ^ The latest message to display, if any (“Install successful” and stuff)
-  , categoryIdx :: Int -- ^ Currently selected category
+  , latestMessage     :: Maybe Message -- ^ The latest message to display, if any (“Install successful” and stuff)
+  , categoryIdx       :: Int -- ^ Currently selected category
   } deriving(Generic)
 
 emptyState = State { packageCache      = mempty
@@ -193,7 +133,7 @@ initState cache = State { packageCache      = cache
                         , categoryIdx       = 0
                         }
 
--- | Isomorphism between a category and its index in the list of all categories (needed for the combobox logic) 
+-- | Isomorphism between a category and its index in the list of all categories (needed for the combobox logic)
 category :: Lens' State PackageCategory
 category = #categoryIdx . from PC.categoryIdx
 

@@ -1,5 +1,5 @@
+{-# LANGUAGE OverloadedLists   #-}
 {-# LANGUAGE OverloadedStrings #-}
-{-# LANGUAGE OverloadedLists #-}
 {-|
   Description: Contains functions relating to home-manager’s rebuild functionality
 Contains functions relating to home-manager’s rebuild functionality
@@ -9,29 +9,15 @@ module NixManager.HMRebuild
   )
 where
 
-import           NixManager.PosixTools          ( mkdir
-                                                , cp
-                                                )
-import           NixManager.Bash                ( Expr(Command)
-                                                , (&&.)
-                                                )
-import           NixManager.HMRebuildMode       ( HMRebuildMode
-                                                  ( RebuildSwitch
-                                                  , RebuildDrySwitch
-                                                  )
-                                                )
-import           NixManager.Process             ( runProcess
-                                                , noStdin
-                                                , ProcessData
-                                                )
-import           NixManager.HMPackagesUtil      ( locatePendingPackagesFileMaybeCreate
-                                                )
-import           NixManager.HMServicesUtil      ( locatePendingServicesFileMaybeCreate
-                                                )
-import           System.Directory               ( getXdgDirectory
-                                                , XdgDirectory(XdgCache)
-                                                )
-import           NixManager.Constants           ( appName )
+import           NixManager.Bash           (Expr (Command), (&&.))
+import           NixManager.Constants      (appName)
+import           NixManager.HMPackagesUtil (locatePendingPackagesFileMaybeCreate)
+import           NixManager.HMRebuildMode  (HMRebuildMode (RebuildDrySwitch, RebuildSwitch))
+import           NixManager.HMServicesUtil (locatePendingServicesFileMaybeCreate)
+import           NixManager.PosixTools     (cp, mkdir)
+import           NixManager.Process        (ProcessData, noStdin, runProcess)
+import           System.Directory          (XdgDirectory (XdgCache),
+                                            getXdgDirectory)
 
 -- | The bash expression corresponding to a rebuild
 rebuildExpr :: HMRebuildMode -> Expr

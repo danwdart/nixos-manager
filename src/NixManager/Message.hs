@@ -2,11 +2,11 @@
   Description: Type for messages to be displayed in the GUI (errors, infos)
 Type for messages to be displayed in the GUI (errors, infos)
   -}
-{-# LANGUAGE DeriveGeneric #-}
-{-# LANGUAGE FlexibleContexts #-}
+{-# LANGUAGE DeriveGeneric     #-}
+{-# LANGUAGE FlexibleContexts  #-}
+{-# LANGUAGE OverloadedLabels  #-}
+{-# LANGUAGE OverloadedLists   #-}
 {-# LANGUAGE OverloadedStrings #-}
-{-# LANGUAGE OverloadedLabels #-}
-{-# LANGUAGE OverloadedLists #-}
 module NixManager.Message
   ( MessageType
   , Message
@@ -16,18 +16,13 @@ module NixManager.Message
   )
 where
 
-import           GHC.Generics                   ( Generic )
-import           Data.Text                      ( Text )
-import           Control.Lens                   ( has
-                                                , (^.)
-                                                )
-import qualified GI.Gtk                        as Gtk
-import           GI.Gtk.Declarative             ( widget
-                                                , classes
-                                                , Widget
-                                                , Attribute((:=))
-                                                )
-import           Data.Generics.Labels           ( )
+import           Control.Lens         (has, (^.))
+import           Data.Generics.Labels ()
+import           Data.Text            (Text)
+import           GHC.Generics         (Generic)
+import qualified GI.Gtk               as Gtk
+import           GI.Gtk.Declarative   (Attribute ((:=)), Widget, classes,
+                                       widget)
 
 -- | Type of the message (determines the icon and/or background color)
 data MessageType = ErrorMessage

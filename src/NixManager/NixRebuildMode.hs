@@ -12,15 +12,11 @@ module NixManager.NixRebuildMode
   )
 where
 
-import           NixManager.Util                ( showText
-                                                , kebapize
-                                                )
-import           Data.List                      ( elemIndex )
-import           Data.Maybe                     ( fromJust )
-import           Data.Text                      ( Text )
-import           Control.Lens                   ( iso
-                                                , Iso'
-                                                )
+import           Control.Lens    (Iso', iso)
+import           Data.List       (elemIndex)
+import           Data.Maybe      (fromJust)
+import           Data.Text       (Text)
+import           NixManager.Util (kebapize, showText)
 
 -- | All possible arguments to @nixos-rebuild@
 data NixRebuildMode = NixRebuildSwitch

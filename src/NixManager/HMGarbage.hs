@@ -8,11 +8,8 @@ module NixManager.HMGarbage
   )
 where
 
-import           NixManager.Bash                ( Expr(Command) )
-import           NixManager.Process             ( runProcess
-                                                , noStdin
-                                                , ProcessData
-                                                )
+import           NixManager.Bash    (Expr (Command))
+import           NixManager.Process (ProcessData, noStdin, runProcess)
 
 -- | The bash expression for @nix-collect-garbage@
 collectGarbageExpr :: Expr

@@ -1,8 +1,8 @@
-{-# LANGUAGE OverloadedLabels #-}
-{-# LANGUAGE RankNTypes #-}
-{-# LANGUAGE FlexibleContexts #-}
-{-# LANGUAGE OverloadedLists #-}
+{-# LANGUAGE FlexibleContexts  #-}
+{-# LANGUAGE OverloadedLabels  #-}
+{-# LANGUAGE OverloadedLists   #-}
 {-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE RankNTypes        #-}
 {-|
   Description: Contains the “widget” for the two-paned “Edit services” tab
 Contains the “widget” for the two-paned “Edit services” tab
@@ -14,112 +14,58 @@ module NixManager.View.ServiceEditView
   )
 where
 
-import           Data.Validation                ( Validation(Success, Failure) )
-import           NixManager.Constants           ( globalOptionsMagicString )
-import           NixManager.View.GtkUtil        ( paddedAround
-                                                , expandAndFill
-                                                )
-import           NixManager.NixLocation         ( NixLocation
-                                                , flattenedTail
-                                                , flattened
-                                                , flattenLocation
-                                                , firstComponent
-                                                , isSingleton
-                                                , locationComponents
-                                                , locationDropComponents
-                                                )
-import           NixManager.Services.ServiceCategory
-                                                ( ServiceCategory
-                                                , serviceCategories
-                                                , categoryToText
-                                                , categoryToNixPrefix
-                                                , serviceCategoryIdx
-                                                )
-import           Data.Maybe                     ( fromMaybe )
-import           NixManager.Docbook             ( parseDocbook
-                                                , docbookToPango
-                                                )
-import           Data.List                      ( elemIndex )
-import           NixManager.NixExpr             ( NixExpr
-                                                  ( NixBoolean
-                                                  , NixString
-                                                  , NixSymbol
-                                                  )
-                                                , prettyPrintSingleLine
-                                                , parseNixString
-                                                )
-import           NixManager.View.ComboBox       ( comboBox
-                                                , ComboBoxChangeEvent
-                                                  ( ComboBoxChangeEvent
-                                                  )
-                                                , ComboBoxProperties
-                                                  ( ComboBoxProperties
-                                                  )
-                                                )
-import qualified Data.Vector                   as Vector
-import           Data.Text                      ( isInfixOf
-                                                , Text
-                                                )
-import           NixManager.Util                ( showText
-                                                , predAnd
-                                                , surroundSimple
-                                                , Endo
-                                                )
-import           NixManager.Services.StateData  ( StateData )
-import           NixManager.NixServiceOption    ( NixServiceOption )
-import           GI.Gtk.Declarative.Widget      ( Widget )
-import           GI.Gtk.Declarative.SingleWidget
-                                                ( SingleWidget )
-import           GI.Gtk.Declarative             ( bin
-                                                , onM
-                                                , on
-                                                , pane
-                                                , paned
-                                                , classes
-                                                , defaultPaneProperties
-                                                , BoxChild(BoxChild)
-                                                , defaultBoxChildProperties
-                                                , FromWidget
-                                                , Bin
-                                                , widget
-                                                , Attribute((:=))
-                                                , container
-                                                )
-import           Data.Vector.Lens               ( toVectorOf )
-import qualified GI.Gtk                        as Gtk
-import           Control.Lens                   ( (^.)
-                                                , from
-                                                , non
-                                                , re
-                                                , Traversal'
-                                                , filtered
-                                                , view
-                                                , pre
-                                                , traversed
-                                                , set
-                                                , ix
-                                                , non
-                                                , (^?)
-                                                , to
-                                                , folded
-                                                , at
-                                                , (^..)
-                                                , (&)
-                                                , (.~)
-                                                , (^?!)
-                                                )
-import           NixManager.NixService          ( NixService )
-import           NixManager.NixServiceOptionType
-                                                ( NixServiceOptionType
-                                                  ( NixServiceOptionString
-                                                  , NixServiceOptionPath
-                                                  , NixServiceOptionSubmodule
-                                                  , NixServiceOptionBoolean
-                                                  , NixServiceOptionOneOfString
-                                                  , NixServiceOptionPackage
-                                                  )
-                                                )
-import           NixManager.ManagerState        ( ManagerState )
+import           Control.Lens                        (Traversal', at, filtered,
+                                                      folded, from, ix, non,
+                                                      pre, re, set, to,
+                                                      traversed, view, (&),
+                                                      (.~), (^.), (^..), (^?!),
+                                                      (^?))
+import           Data.List                           (elemIndex)
+import           Data.Maybe                          (fromMaybe)
+import           Data.Text                           (Text, isInfixOf)
+import           Data.Validation                     (Validation (Failure, Success))
+import qualified Data.Vector                         as Vector
+import           Data.Vector.Lens                    (toVectorOf)
+import qualified GI.Gtk                              as Gtk
+import           GI.Gtk.Declarative                  (Attribute ((:=)), Bin,
+                                                      BoxChild (BoxChild),
+                                                      FromWidget, bin, classes,
+                                                      container,
+                                                      defaultBoxChildProperties,
+                                                      defaultPaneProperties, on,
+                                                      onM, pane, paned, widget)
+import           GI.Gtk.Declarative.SingleWidget     (SingleWidget)
+import           GI.Gtk.Declarative.Widget           (Widget)
+import           NixManager.Constants                (globalOptionsMagicString)
+import           NixManager.Docbook                  (docbookToPango,
+                                                      parseDocbook)
+import           NixManager.ManagerState             (ManagerState)
+import           NixManager.NixExpr                  (NixExpr (NixBoolean, NixString, NixSymbol),
+                                                      parseNixString,
+                                                      prettyPrintSingleLine)
+import           NixManager.NixLocation              (NixLocation,
+                                                      firstComponent,
+                                                      flattenLocation,
+                                                      flattened, flattenedTail,
+                                                      isSingleton,
+                                                      locationComponents,
+                                                      locationDropComponents)
+import           NixManager.NixService               (NixService)
+import           NixManager.NixServiceOption         (NixServiceOption)
+import           NixManager.NixServiceOptionType     (NixServiceOptionType (NixServiceOptionBoolean, NixServiceOptionOneOfString, NixServiceOptionPackage, NixServiceOptionPath, NixServiceOptionString, NixServiceOptionSubmodule))
+import           NixManager.Services.ServiceCategory (ServiceCategory,
+                                                      categoryToNixPrefix,
+                                                      categoryToText,
+                                                      serviceCategories,
+                                                      serviceCategoryIdx)
+import           NixManager.Services.StateData       (StateData)
+import           NixManager.Util                     (Endo, predAnd, showText,
+                                                      surroundSimple)
+import           NixManager.View.ComboBox            (ComboBoxChangeEvent (ComboBoxChangeEvent),
+                                                      ComboBoxProperties (ComboBoxProperties),
+                                                      comboBox)
+import           NixManager.View.GtkUtil             (expandAndFill,
+                                                      paddedAround)
 
 data EditViewEvent = EditViewSelected (Maybe Int)  -- ^ Triggered when the current service selection changes
                    | EditViewSearchChanged Text -- ^ Triggered when the search string changes

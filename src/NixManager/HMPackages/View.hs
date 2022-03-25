@@ -9,16 +9,12 @@ module NixManager.HMPackages.View
   )
 where
 
-import qualified NixManager.View.PackageEditView
-                                               as PackageEditView
-import           NixManager.HMPackages.Event    ( Event(EventPackageEditView) )
-import           Control.Lens                   ( (^.) )
-import           NixManager.ManagerState        ( ManagerState )
-import           NixManager.ManagerEvent        ( ManagerEvent
-                                                  ( ManagerEventHMPackages
-                                                  )
-                                                )
-import           GI.Gtk.Declarative             ( Widget )
+import           Control.Lens                    ((^.))
+import           GI.Gtk.Declarative              (Widget)
+import           NixManager.HMPackages.Event     (Event (EventPackageEditView))
+import           NixManager.ManagerEvent         (ManagerEvent (ManagerEventHMPackages))
+import           NixManager.ManagerState         (ManagerState)
+import qualified NixManager.View.PackageEditView as PackageEditView
 
 -- | The package list
 packagesBox :: ManagerState -> Widget ManagerEvent

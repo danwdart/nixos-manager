@@ -9,32 +9,19 @@ module NixManager.NixServiceOptionType
   )
 where
 
-import           Data.List                      ( intercalate )
-import           Data.Bifunctor                 ( first )
-import           Control.Monad                  ( void )
-import           Data.Functor                   ( ($>) )
-import           Data.Void                      ( Void )
-import           Data.Text                      ( Text
-                                                , pack
-                                                , unpack
-                                                )
-import qualified Text.Megaparsec.Char.Lexer    as L
-import           Text.Megaparsec.Char           ( char
-                                                , string
-                                                )
-import           Text.Megaparsec                ( Parsec
-                                                , manyTill
-                                                , sepBy
-                                                , optional
-                                                , errorBundlePretty
-                                                , parse
-                                                , (<|>)
-                                                , (<?>)
-                                                )
-import           NixManager.Util                ( fromStringEither
-                                                , TextualError
-                                                , parseSafe
-                                                )
+import           Control.Monad              (void)
+import           Data.Bifunctor             (first)
+import           Data.Functor               (($>))
+import           Data.List                  (intercalate)
+import           Data.Text                  (Text, pack, unpack)
+import           Data.Void                  (Void)
+import           NixManager.Util            (TextualError, fromStringEither,
+                                             parseSafe)
+import           Text.Megaparsec            (Parsec, errorBundlePretty,
+                                             manyTill, optional, parse, sepBy,
+                                             (<?>), (<|>))
+import           Text.Megaparsec.Char       (char, string)
+import qualified Text.Megaparsec.Char.Lexer as L
 
 -- | The @options.json@ file contains a type for the option. This is a mini-DSL which is typed here.
 data NixServiceOptionType = NixServiceOptionInteger

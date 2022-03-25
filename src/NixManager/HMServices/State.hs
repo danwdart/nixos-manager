@@ -1,5 +1,5 @@
-{-# LANGUAGE LambdaCase #-}
-{-# LANGUAGE DeriveGeneric #-}
+{-# LANGUAGE DeriveGeneric     #-}
+{-# LANGUAGE LambdaCase        #-}
 {-# LANGUAGE OverloadedStrings #-}
 module NixManager.HMServices.State
   ( State(..)
@@ -7,17 +7,16 @@ module NixManager.HMServices.State
   )
 where
 
-import           NixManager.Services.StateData  ( StateData(StateData) )
-import           NixManager.NixServiceOption    ( readOptionsFile )
-import           NixManager.NixService          ( makeServices )
-import           NixManager.HMServicesUtil      ( readPendingServicesFile
-                                                , locateOptionsFile
-                                                )
-import           Data.Text                      ( Text )
-import           NixManager.Util                ( showText )
-import           Control.Lens                   ( makePrisms )
-import           Data.Validation                ( Validation(Success, Failure) )
-import           GHC.Generics                   ( Generic )
+import           Control.Lens                  (makePrisms)
+import           Data.Text                     (Text)
+import           Data.Validation               (Validation (Failure, Success))
+import           GHC.Generics                  (Generic)
+import           NixManager.HMServicesUtil     (locateOptionsFile,
+                                                readPendingServicesFile)
+import           NixManager.NixService         (makeServices)
+import           NixManager.NixServiceOption   (readOptionsFile)
+import           NixManager.Services.StateData (StateData (StateData))
+import           NixManager.Util               (showText)
 
 data State = NoHomeManager
            | InvalidHomeManager Text

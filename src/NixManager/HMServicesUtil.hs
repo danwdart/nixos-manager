@@ -1,4 +1,4 @@
-{-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE OverloadedStrings   #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 {-|
   Description: Provides functions and types regarding “services” in home-manager
@@ -15,39 +15,20 @@ module NixManager.HMServicesUtil
   )
 where
 
-import           Data.Text.Lens                 ( unpacked )
-import           System.Environment             ( getEnv )
-import           Control.Monad                  ( unless )
-import           System.FilePath                ( (</>) )
-import           NixManager.Constants           ( appName )
-import           Data.String                    ( IsString )
-import           System.Directory               ( getXdgDirectory
-                                                , doesFileExist
-                                                , XdgDirectory
-                                                  ( XdgConfig
-                                                  , XdgCache
-                                                  )
-                                                )
-import           Prelude                 hiding ( readFile )
-import           Control.Lens                   ( filteredBy
-                                                , only
-                                                , at
-                                                , folded
-                                                , (^?)
-                                                )
-import           NixManager.NixExpr             ( NixExpr
-                                                  ( NixFunctionDecl
-                                                  , NixSet
-                                                  , NixNull
-                                                  )
-                                                , NixFunction(NixFunction)
-                                                , parseNixFile
-                                                , writeNixFile
-                                                )
-import           NixManager.Util                ( TextualError
-                                                , addToError
-                                                , toMaybe
-                                                )
+import           Control.Lens         (at, filteredBy, folded, only, (^?))
+import           Control.Monad        (unless)
+import           Data.String          (IsString)
+import           Data.Text.Lens       (unpacked)
+import           NixManager.Constants (appName)
+import           NixManager.NixExpr   (NixExpr (NixFunctionDecl, NixNull, NixSet),
+                                       NixFunction (NixFunction), parseNixFile,
+                                       writeNixFile)
+import           NixManager.Util      (TextualError, addToError, toMaybe)
+import           Prelude              hiding (readFile)
+import           System.Directory     (XdgDirectory (XdgCache, XdgConfig),
+                                       doesFileExist, getXdgDirectory)
+import           System.Environment   (getEnv)
+import           System.FilePath      ((</>))
 
 -- | File name for the services Nix file
 servicesFileName :: IsString s => s

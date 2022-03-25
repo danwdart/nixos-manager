@@ -4,25 +4,13 @@ module NixManager.HMServices.Update
   )
 where
 
-import           NixManager.HMServices.Event    ( Event
-                                                  ( EventEditView
-                                                  , EventReload
-                                                  , EventReloaded
-                                                  )
-                                                )
-import qualified NixManager.View.ServiceEditView
-                                               as EditView
-import           Control.Lens                   ( over
-                                                , (^?!)
-                                                , (%~)
-                                                , (&)
-                                                )
-import           GI.Gtk.Declarative.App.Simple  ( Transition(Transition) )
-import           NixManager.HMServicesUtil      ( writePendingServicesFile )
-import           NixManager.ManagerState        ( ManagerState )
-import           NixManager.ManagerEvent        ( ManagerEvent
-                                                , pureTransition
-                                                )
+import           Control.Lens                    (over, (%~), (&), (^?!))
+import           GI.Gtk.Declarative.App.Simple   (Transition (Transition))
+import           NixManager.HMServices.Event     (Event (EventEditView, EventReload, EventReloaded))
+import           NixManager.HMServicesUtil       (writePendingServicesFile)
+import           NixManager.ManagerEvent         (ManagerEvent, pureTransition)
+import           NixManager.ManagerState         (ManagerState)
+import qualified NixManager.View.ServiceEditView as EditView
 
 updateEvent :: ManagerState -> Event -> Transition ManagerState ManagerEvent
 updateEvent s (EventEditView (EditView.EditViewSettingChanged setter)) =

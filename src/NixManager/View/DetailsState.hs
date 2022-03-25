@@ -9,10 +9,8 @@ module NixManager.View.DetailsState
   )
 where
 
-import           Control.Lens                   ( Iso'
-                                                , iso
-                                                )
-import           GHC.Generics                   ( Generic )
+import           Control.Lens (Iso', iso)
+import           GHC.Generics (Generic)
 
 -- | Signifies if an expander is contracted or expanded
 data DetailsState = DetailsContracted

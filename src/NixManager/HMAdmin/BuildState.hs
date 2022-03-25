@@ -8,11 +8,11 @@ module NixManager.HMAdmin.BuildState
   )
 where
 
-import           NixManager.Process             ( ProcessData )
-import           GHC.Generics                   ( Generic )
+import           GHC.Generics       (Generic)
+import           NixManager.Process (ProcessData)
 
 -- | Contains all the data corresponding to “some program that’s currently running”
 data BuildState = BuildState {
-    counter :: Int  -- ^ This field is necessary to “pulse” the GTK progress bar while building, see "NixManager.View.ProgressBar" for details
+    counter     :: Int  -- ^ This field is necessary to “pulse” the GTK progress bar while building, see "NixManager.View.ProgressBar" for details
   , processData :: ProcessData -- ^ The process data
   } deriving(Generic)

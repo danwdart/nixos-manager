@@ -8,49 +8,23 @@ module NixManager.Services.Update
   )
 where
 
-import           Data.Validation                ( Validation(Failure, Success) )
-import           NixManager.ManagerEvent        ( servicesEvent
-                                                , pureTransition
-                                                , ManagerEvent
-                                                )
-import qualified NixManager.View.ServiceEditView
-                                               as EditView
-import           NixManager.Services.State      ( State
-                                                  ( StateDownloading
-                                                  , StateInvalidOptions
-                                                  )
-                                                , initState
-                                                , StateDownloadingData
-                                                  ( StateDownloadingData
-                                                  )
-                                                )
-import qualified NixManager.Services.Download  as ServiceDownload
-import           Data.Foldable                  ( for_ )
-import           Control.Lens                   ( over
-                                                , (&)
-                                                , (^?)
-                                                , (.~)
-                                                , (+~)
-                                                , (%~)
-                                                , (^?!)
-                                                )
-import           NixManager.ManagerState        ( ManagerState(..) )
-import           NixManager.NixServicesUtil     ( writeLocalServiceFile )
-import           NixManager.Services.Event      ( Event
-                                                  ( EventDownloadStart
-                                                  , EventDownloadCancel
-                                                  , EventStateResult
-                                                  , EventEditView
-                                                  , EventStateReload
-                                                  , EventDownloadCheck
-                                                  , EventDownloadStarted
-                                                  )
-                                                )
-import           NixManager.Util                ( threadDelayMillis )
-import           GI.Gtk.Declarative.App.Simple  ( Transition(Transition) )
-import           Prelude                 hiding ( length
-                                                , putStrLn
-                                                )
+import           Control.Lens                    (over, (%~), (&), (+~), (.~),
+                                                  (^?!), (^?))
+import           Data.Foldable                   (for_)
+import           Data.Validation                 (Validation (Failure, Success))
+import           GI.Gtk.Declarative.App.Simple   (Transition (Transition))
+import           NixManager.ManagerEvent         (ManagerEvent, pureTransition,
+                                                  servicesEvent)
+import           NixManager.ManagerState         (ManagerState (..))
+import           NixManager.NixServicesUtil      (writeLocalServiceFile)
+import qualified NixManager.Services.Download    as ServiceDownload
+import           NixManager.Services.Event       (Event (EventDownloadCancel, EventDownloadCheck, EventDownloadStart, EventDownloadStarted, EventEditView, EventStateReload, EventStateResult))
+import           NixManager.Services.State       (State (StateDownloading, StateInvalidOptions),
+                                                  StateDownloadingData (StateDownloadingData),
+                                                  initState)
+import           NixManager.Util                 (threadDelayMillis)
+import qualified NixManager.View.ServiceEditView as EditView
+import           Prelude                         hiding (length, putStrLn)
 
 
 -- | The actual update function

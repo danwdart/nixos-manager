@@ -9,7 +9,7 @@ module NixManager.Constants
   )
 where
 
-import           Data.Text                      ( Text )
+import           Data.Text (Text)
 
 -- | The application name, in case that needs to be displayed (it’s used when determining the application’s save paths)
 appName :: String

@@ -9,10 +9,8 @@ module NixManager.View.IconName
   )
 where
 
-import           Data.Text                      ( Text )
-import           NixManager.Util                ( showText
-                                                , kebapize
-                                                )
+import           Data.Text       (Text)
+import           NixManager.Util (kebapize, showText)
 
 -- | An enum wrapping GTK’s icon name values
 data IconName = SystemRun

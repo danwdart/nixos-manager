@@ -9,19 +9,16 @@ module NixManager.HMAdmin.GarbageData
   )
 where
 
-import           NixManager.View.DetailsState   ( DetailsState
-                                                  ( DetailsContracted
-                                                  )
-                                                )
-import           NixManager.Process             ( ProcessOutput )
-import           NixManager.HMAdmin.BuildState  ( BuildState )
-import           GHC.Generics                   ( Generic )
+import           GHC.Generics                  (Generic)
+import           NixManager.HMAdmin.BuildState (BuildState)
+import           NixManager.Process            (ProcessOutput)
+import           NixManager.View.DetailsState  (DetailsState (DetailsContracted))
 
 -- | Contains all data for the garbage collection GUI
 data GarbageData = GarbageData {
-    processOutput :: ProcessOutput -- ^ Output of the current or last garbage collection process (possibly empty)
-  , buildState :: Maybe BuildState -- ^ Contains the current build state of the garbage collection
-  , detailsState :: DetailsState -- ^ Are the Details expanded?
+    processOutput    :: ProcessOutput -- ^ Output of the current or last garbage collection process (possibly empty)
+  , buildState       :: Maybe BuildState -- ^ Contains the current build state of the garbage collection
+  , detailsState     :: DetailsState -- ^ Are the Details expanded?
   , olderGenerations :: Bool -- ^ Shall we delete older generations?
   } deriving(Generic)
 

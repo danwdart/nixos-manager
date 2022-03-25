@@ -10,21 +10,20 @@ module NixManager.Services.State
   )
 where
 
-import           Data.Validation                ( Validation(Success, Failure) )
-import           NixManager.Services.StateData  ( StateData(StateData) )
-import           NixManager.Services.Download   ( DownloadState )
-import           Data.Text                      ( Text )
-import           NixManager.NixServiceOption    ( readOptionsFile
-                                                , locateOptionsFile
-                                                )
-import           NixManager.NixService          ( makeServices )
-import           NixManager.NixServicesUtil     ( readLocalServiceFile )
-import           GHC.Generics                   ( Generic )
+import           Data.Text                     (Text)
+import           Data.Validation               (Validation (Failure, Success))
+import           GHC.Generics                  (Generic)
+import           NixManager.NixService         (makeServices)
+import           NixManager.NixServiceOption   (locateOptionsFile,
+                                                readOptionsFile)
+import           NixManager.NixServicesUtil    (readLocalServiceFile)
+import           NixManager.Services.Download  (DownloadState)
+import           NixManager.Services.StateData (StateData (StateData))
 
 -- | This contains the all data for the state “we’re currently downloading the services file”
 data StateDownloadingData = StateDownloadingData {
     counter :: Int  -- ^ This field is necessary to “pulse” the GTK progress bar while building, see "NixManager.View.ProgressBar" for details
-  , var :: DownloadState -- ^ The actual download state
+  , var     :: DownloadState -- ^ The actual download state
   } deriving(Generic)
 
 data State = StateInvalidOptions (Maybe Text) -- ^ Parsing the service options file failed for some reason

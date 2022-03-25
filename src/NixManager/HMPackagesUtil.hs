@@ -2,9 +2,9 @@
   Description: Functions to process (install/uninstall, ...) home-manager packages
 Functions to process (install/uninstall, ...) home-manager packages
   -}
-{-# LANGUAGE OverloadedStrings #-}
-{-# LANGUAGE OverloadedLabels #-}
-{-# LANGUAGE OverloadedLists #-}
+{-# LANGUAGE OverloadedLabels    #-}
+{-# LANGUAGE OverloadedLists     #-}
+{-# LANGUAGE OverloadedStrings   #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 module NixManager.HMPackagesUtil
   ( readPackageCache
@@ -17,63 +17,29 @@ module NixManager.HMPackagesUtil
   )
 where
 
-import           Data.Validation                ( Validation(Success, Failure) )
-import           Control.Monad                  ( void )
-import           NixManager.NixPackageSearch    ( searchPackages )
-import           NixManager.Constants           ( appName )
-import           NixManager.NixLocation         ( flattened
-                                                , NixLocation
-                                                , locationFromText
-                                                , replaceFirstComponent
-                                                )
-import           Data.Map.Strict                ( singleton )
-import           System.Directory               ( getXdgDirectory
-                                                , doesFileExist
-                                                , XdgDirectory
-                                                  ( XdgConfig
-                                                  , XdgCache
-                                                  )
-                                                )
-import           System.FilePath                ( (</>) )
-import           Data.List                      ( (\\) )
-import           NixManager.Util                ( TextualError
-                                                , Endo
-                                                , addToError
-                                                , ifSuccessIO
-                                                , showText
-                                                )
-import           Data.String                    ( IsString )
-import           NixManager.NixExpr             ( NixExpr
-                                                  ( NixSymbol
-                                                  , NixSet
-                                                  , NixList
-                                                  , NixFunctionDecl
-                                                  )
-                                                , NixFunction(NixFunction)
-                                                , evalSymbols
-                                                , parseNixFile
-                                                , writeNixFile
-                                                )
-import           NixManager.NixPackageStatus    ( NixPackageStatus
-                                                  ( NixPackageNothing
-                                                  , NixPackageInstalled
-                                                  , NixPackagePendingInstall
-                                                  , NixPackagePendingUninstall
-                                                  )
-                                                )
-import           NixManager.NixPackage          ( NixPackage )
-import           Control.Lens                   ( (^.)
-                                                , to
-                                                , set
-                                                , (^?)
-                                                , ix
-                                                , Traversal'
-                                                , hasn't
-                                                , only
-                                                , (<>~)
-                                                , (&)
-                                                , (%~)
-                                                )
+import           Control.Lens                (Traversal', hasn't, ix, only, set,
+                                              to, (%~), (&), (<>~), (^.), (^?))
+import           Control.Monad               (void)
+import           Data.List                   ((\\))
+import           Data.Map.Strict             (singleton)
+import           Data.String                 (IsString)
+import           Data.Validation             (Validation (Failure, Success))
+import           NixManager.Constants        (appName)
+import           NixManager.NixExpr          (NixExpr (NixFunctionDecl, NixList, NixSet, NixSymbol),
+                                              NixFunction (NixFunction),
+                                              evalSymbols, parseNixFile,
+                                              writeNixFile)
+import           NixManager.NixLocation      (NixLocation, flattened,
+                                              locationFromText,
+                                              replaceFirstComponent)
+import           NixManager.NixPackage       (NixPackage)
+import           NixManager.NixPackageSearch (searchPackages)
+import           NixManager.NixPackageStatus (NixPackageStatus (NixPackageInstalled, NixPackageNothing, NixPackagePendingInstall, NixPackagePendingUninstall))
+import           NixManager.Util             (Endo, TextualError, addToError,
+                                              ifSuccessIO, showText)
+import           System.Directory            (XdgDirectory (XdgCache, XdgConfig),
+                                              doesFileExist, getXdgDirectory)
+import           System.FilePath             ((</>))
 
 -- | File name for the packages Nix file
 packagesFileName :: IsString s => s

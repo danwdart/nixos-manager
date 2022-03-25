@@ -2,8 +2,8 @@
   Description: Functions and structures relating to the @nixos-rebuild@ command
 Functions and structures relating to the @nixos-rebuild@ command
   -}
-{-# LANGUAGE OverloadedStrings #-}
-{-# LANGUAGE OverloadedLists #-}
+{-# LANGUAGE OverloadedLists     #-}
+{-# LANGUAGE OverloadedStrings   #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 module NixManager.NixRebuild
   ( rebuild
@@ -13,47 +13,28 @@ module NixManager.NixRebuild
   )
 where
 
-import           Control.Monad                  ( void )
-import           NixManager.Password            ( Password
-                                                , getPassword
-                                                )
-import           NixManager.AskPass             ( sudoExpr )
-import           NixManager.Constants           ( rootManagerPath )
-import           Data.Text.Encoding             ( encodeUtf8 )
-import           NixManager.PosixTools          ( mkdir
-                                                , cp
-                                                , mv
-                                                )
-import           NixManager.Bash                ( Expr(Command, Subshell)
-                                                , Arg(LiteralArg)
-                                                , (||.)
-                                                , (&&.)
-                                                , (>>.)
-                                                , devNullify
-                                                )
-import           Prelude                 hiding ( readFile )
-import           NixManager.Util                ( mwhen )
-import           NixManager.NixPackagesUtil     ( locateLocalPackagesFileMaybeCreate
-                                                , locateRootPackagesFile
-                                                )
-import           NixManager.NixServicesUtil     ( locateLocalServicesFileMaybeCreate
-                                                , locateRootServicesFile
-                                                )
-import           NixManager.Process             ( runProcess
-                                                , ProcessData
-                                                , waitUntilFinished
-                                                )
-import           System.FilePath                ( (-<.>) )
-import           NixManager.NixRebuildMode      ( NixRebuildMode
-                                                , rebuildModeToText
-                                                , isDry
-                                                )
-import           NixManager.NixRebuildUpdateMode
-                                                ( NixRebuildUpdateMode
-                                                  ( NixRebuildUpdateUpdate
-                                                  , NixRebuildUpdateRollback
-                                                  )
-                                                )
+import           Control.Monad                   (void)
+import           Data.Text.Encoding              (encodeUtf8)
+import           NixManager.AskPass              (sudoExpr)
+import           NixManager.Bash                 (Arg (LiteralArg),
+                                                  Expr (Command, Subshell),
+                                                  devNullify, (&&.), (>>.),
+                                                  (||.))
+import           NixManager.Constants            (rootManagerPath)
+import           NixManager.NixPackagesUtil      (locateLocalPackagesFileMaybeCreate,
+                                                  locateRootPackagesFile)
+import           NixManager.NixRebuildMode       (NixRebuildMode, isDry,
+                                                  rebuildModeToText)
+import           NixManager.NixRebuildUpdateMode (NixRebuildUpdateMode (NixRebuildUpdateRollback, NixRebuildUpdateUpdate))
+import           NixManager.NixServicesUtil      (locateLocalServicesFileMaybeCreate,
+                                                  locateRootServicesFile)
+import           NixManager.Password             (Password, getPassword)
+import           NixManager.PosixTools           (cp, mkdir, mv)
+import           NixManager.Process              (ProcessData, runProcess,
+                                                  waitUntilFinished)
+import           NixManager.Util                 (mwhen)
+import           Prelude                         hiding (readFile)
+import           System.FilePath                 ((-<.>))
 
 
 

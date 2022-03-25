@@ -18,16 +18,11 @@ module NixManager.NixLocation
   )
 where
 
-import qualified Data.List.NonEmpty            as NE
-import           Data.Text                      ( Text
-                                                , intercalate
-                                                , splitOn
-                                                )
-import           Data.Foldable                  ( toList )
-import           NixManager.Util                ( Endo )
-import           Control.Lens                   ( to
-                                                , Getter
-                                                )
+import           Control.Lens       (Getter, to)
+import           Data.Foldable      (toList)
+import qualified Data.List.NonEmpty as NE
+import           Data.Text          (Text, intercalate, splitOn)
+import           NixManager.Util    (Endo)
 
 -- | A dot-separated, non-empty “location” inside nixpkgs.
 newtype NixLocation = NixLocation {

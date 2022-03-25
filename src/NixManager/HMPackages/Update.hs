@@ -2,54 +2,31 @@
   Description: Contains the update logic for the Packages tab
 Contains the update logic for the Packages tab
   -}
-{-# LANGUAGE OverloadedLabels #-}
-{-# LANGUAGE FlexibleContexts #-}
-{-# LANGUAGE BlockArguments #-}
+{-# LANGUAGE BlockArguments    #-}
+{-# LANGUAGE FlexibleContexts  #-}
+{-# LANGUAGE OverloadedLabels  #-}
 {-# LANGUAGE OverloadedStrings #-}
 module NixManager.HMPackages.Update
   ( updateEvent
   )
 where
 
-import           Data.Validation                ( Validation(Failure, Success) )
-import           Control.Lens                   ( (&)
-                                                , (^?)
-                                                , (?~)
-                                                , (.~)
-                                                )
-import           NixManager.ManagerState        ( ManagerState(..) )
-import           NixManager.HMPackages.Event    ( Event
-                                                  ( EventOperationCompleted
-                                                  , EventInstallCompleted
-                                                  , EventUninstallCompleted
-                                                  , EventReload
-                                                  , EventReloadFinished
-                                                  , EventPackageEditView
-                                                  )
-                                                )
-import qualified NixManager.HMAdmin.Event      as HMAdminEvent
-import           NixManager.Message             ( errorMessage
-                                                , infoMessage
-                                                , Message
-                                                )
-import           NixManager.ManagerEvent        ( ManagerEvent
-                                                  ( ManagerEventHMPackages
-                                                  )
-                                                , pureTransition
-                                                , liftUpdate
-                                                , hmPackagesEvent
-                                                , hmAdminEvent
-                                                )
-import           NixManager.HMPackagesUtil      ( installPackage
-                                                , readPackageCache
-                                                , uninstallPackage
-                                                )
-import           GI.Gtk.Declarative.App.Simple  ( Transition(Transition) )
-import           Prelude                 hiding ( length
-                                                , putStrLn
-                                                )
-import qualified NixManager.View.PackageEditView
-                                               as PEV
+import           Control.Lens                    ((&), (.~), (?~), (^?))
+import           Data.Validation                 (Validation (Failure, Success))
+import           GI.Gtk.Declarative.App.Simple   (Transition (Transition))
+import qualified NixManager.HMAdmin.Event        as HMAdminEvent
+import           NixManager.HMPackages.Event     (Event (EventInstallCompleted, EventOperationCompleted, EventPackageEditView, EventReload, EventReloadFinished, EventUninstallCompleted))
+import           NixManager.HMPackagesUtil       (installPackage,
+                                                  readPackageCache,
+                                                  uninstallPackage)
+import           NixManager.ManagerEvent         (ManagerEvent (ManagerEventHMPackages),
+                                                  hmAdminEvent, hmPackagesEvent,
+                                                  liftUpdate, pureTransition)
+import           NixManager.ManagerState         (ManagerState (..))
+import           NixManager.Message              (Message, errorMessage,
+                                                  infoMessage)
+import qualified NixManager.View.PackageEditView as PEV
+import           Prelude                         hiding (length, putStrLn)
 
 -- | What message to display when the install operation completes
 installCompletedMessage :: PEV.InstallationType -> Message

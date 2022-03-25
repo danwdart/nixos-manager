@@ -3,37 +3,30 @@
 
 An image button widget
   -}
-{-# LANGUAGE NamedFieldPuns #-}
-{-# LANGUAGE TypeFamilies #-}
-{-# LANGUAGE FlexibleContexts #-}
-{-# LANGUAGE OverloadedLists #-}
+{-# LANGUAGE FlexibleContexts  #-}
+{-# LANGUAGE NamedFieldPuns    #-}
+{-# LANGUAGE OverloadedLists   #-}
 {-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE TypeFamilies      #-}
 module NixManager.View.ImageButton
   ( imageButton
   )
 where
 
-import           GI.Gtk.Declarative.Attributes.Internal
-                                                ( addSignalHandler )
-import           Data.Vector                    ( Vector )
-import           GI.Gtk.Declarative             ( Widget(Widget)
-                                                , CustomWidget(CustomWidget)
-                                                , customWidget
-                                                , customCreate
-                                                , Attribute
-                                                , customPatch
-                                                , customSubscribe
-                                                , customAttributes
-                                                , customParams
-                                                , CustomPatch
-                                                  ( CustomKeep
-                                                  , CustomModify
-                                                  )
-                                                )
-import qualified GI.Gtk                        as Gtk
-import           NixManager.View.IconName       ( IconName
-                                                , nameToGtk
-                                                )
+import           Data.Vector                            (Vector)
+import qualified GI.Gtk                                 as Gtk
+import           GI.Gtk.Declarative                     (Attribute,
+                                                         CustomPatch (CustomKeep, CustomModify),
+                                                         CustomWidget (CustomWidget),
+                                                         Widget (Widget),
+                                                         customAttributes,
+                                                         customCreate,
+                                                         customParams,
+                                                         customPatch,
+                                                         customSubscribe,
+                                                         customWidget)
+import           GI.Gtk.Declarative.Attributes.Internal (addSignalHandler)
+import           NixManager.View.IconName               (IconName, nameToGtk)
 
 -- | Create an image button widget
 imageButton :: Vector (Attribute Gtk.Button e) -> IconName -> Widget e
