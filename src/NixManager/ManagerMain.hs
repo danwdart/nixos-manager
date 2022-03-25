@@ -3,10 +3,10 @@ Description: NixOS manager's /real/ entry point
 
 This file should initialize the application state, as well as GTK, and then run gi-gtk-declarative-app-simple's main method.
  -}
-{-# LANGUAGE FlexibleContexts  #-}
-{-# LANGUAGE OverloadedLabels  #-}
-{-# LANGUAGE OverloadedLists   #-}
-{-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE FlexibleContexts #-}
+{-# LANGUAGE OverloadedLabels #-}
+{-# LANGUAGE OverloadedLists  #-}
+
 module NixManager.ManagerMain
   ( nixMain
   )

@@ -3,11 +3,11 @@
 
 An image button widget
   -}
-{-# LANGUAGE FlexibleContexts  #-}
-{-# LANGUAGE NamedFieldPuns    #-}
-{-# LANGUAGE OverloadedLists   #-}
-{-# LANGUAGE OverloadedStrings #-}
-{-# LANGUAGE TypeFamilies      #-}
+{-# LANGUAGE FlexibleContexts #-}
+{-# LANGUAGE NamedFieldPuns   #-}
+{-# LANGUAGE OverloadedLists  #-}
+
+{-# LANGUAGE TypeFamilies     #-}
 module NixManager.View.ImageButton
   ( imageButton
   )

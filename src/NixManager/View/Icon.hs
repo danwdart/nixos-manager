@@ -3,10 +3,10 @@
 
 An icon widget
   -}
-{-# LANGUAGE FlexibleContexts  #-}
-{-# LANGUAGE NamedFieldPuns    #-}
-{-# LANGUAGE OverloadedStrings #-}
-{-# LANGUAGE TypeFamilies      #-}
+{-# LANGUAGE FlexibleContexts #-}
+{-# LANGUAGE NamedFieldPuns   #-}
+
+{-# LANGUAGE TypeFamilies     #-}
 module NixManager.View.Icon
   ( icon
   , IconProps(IconProps)
