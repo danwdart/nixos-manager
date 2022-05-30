@@ -37,7 +37,7 @@ makeServices options' =
     options = elems options'
     servicePaths :: Set.Set NixLocation
     servicePaths = Set.fromList
-      (removeLastComponent `mapMaybe` (view #optionLoc <$> options))
+      (mapMaybe (removeLastComponent . view #optionLoc) options)
     serviceForOption :: NixServiceOption -> Maybe NixLocation
     serviceForOption opt =
       case Set.lookupLT (opt ^. #optionLoc) servicePaths of
